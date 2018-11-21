@@ -2,7 +2,6 @@ package postigo.listadelacompra;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -47,7 +46,7 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
 
     public static final String URL_CREAR_PRODUCTO = "http://antoniopostigo.es/Slim2-ok/api/anadir/producto/lista";
 
-    public static final String URL_ELIMINAR_RELACION_LISTA_PRODUCTO = "http://antoniopostigo.es/Slim2-ok/api/anadir/producto";
+    public static final String URL_LIMPIAR_LISTA = "http://antoniopostigo.es/Slim2-ok/api/eliminar/productos/lista";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +84,22 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
         }
 
         if (v==btn_limpiar_lista){
-            Toast.makeText(getApplicationContext(), "Boton limpiar lista", Toast.LENGTH_SHORT).show();
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Vas a eliminar los productos de la lista ¿estas segur@?")
+                    .setTitle("COMPRA FINALIZADA")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            limpiarLista();
+                        }
+                    })
+                    .setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
+
         }
     }
 
@@ -177,7 +191,7 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
         edt_pro_prec.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         edt_pro_prec.setText("0");
         TextView txv_pro_prec = new TextView(this);
-        txv_pro_cant.setText("Precio:");
+        txv_pro_prec.setText("Precio:");
 
         LinearLayout.LayoutParams tv1Params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         tv1Params.bottomMargin = 5;
@@ -196,7 +210,7 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
         layout.addView(edt_pro_prec, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
         alertDialogBuilder.setView(layout);
-        alertDialogBuilder.setTitle("EDITAR LISTA");
+        alertDialogBuilder.setTitle("AÑADIR PRODUCTO");
         // alertDialogBuilder.setMessage("Input Student ID");
         alertDialogBuilder.setCustomTitle(tv);
 
@@ -211,7 +225,7 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
         });
 
         // Setting Positive "OK" Button
-        alertDialogBuilder.setPositiveButton("EDITAR LISTA", new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setPositiveButton("AÑADIR PRODUCTO", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 try {
                     Toast.makeText(getApplicationContext(), "->" + edt_nom_pro.getText().toString(), Toast.LENGTH_SHORT).show();
@@ -229,7 +243,7 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
                     }
 
                 }catch (Exception e){
-                    Toast.makeText(getApplicationContext(), "ERROR AL DAR OK"+"->", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "ERROR al añadir el producto", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -253,6 +267,43 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
         envio_nueva_lista.put("id_lista", datosLista_id_lista);
 
         client.post(URL_CREAR_PRODUCTO, envio_nueva_lista, new JsonHttpResponseHandler(){
+            @Override
+            public void onStart() {
+                super.onStart();
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                progreso.dismiss();
+                String estado = "";
+
+                try {
+                    estado = response.getString("status");
+
+                    if (estado.length()>0) {
+                        Toast.makeText(getApplicationContext(), "Resultado " + estado, Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(getApplicationContext(), "error: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                progreso.dismiss();
+                Toast.makeText(getApplicationContext(), responseString, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void limpiarLista() {
+        final ProgressDialog progreso = new ProgressDialog(getApplicationContext());
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams envio_limpiar_lista = new RequestParams();
+        envio_limpiar_lista.put("id_lista", datosLista_id_lista);
+
+        client.post(URL_LIMPIAR_LISTA, envio_limpiar_lista, new JsonHttpResponseHandler(){
             @Override
             public void onStart() {
                 super.onStart();
