@@ -6,7 +6,10 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.ContextMenu;
 import android.view.Gravity;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -33,6 +36,8 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
 
     private String datosLista_id_lista;
 
+    private int posicion_producto_editar;
+
     private Button btn_anadir_producto;
 
     private Button btn_limpiar_lista;
@@ -45,6 +50,8 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
     public static final String URL_COGER_PRODUCTOS = "http://antoniopostigo.es/Slim2-ok/api/id_lista/obtener/productos";
 
     public static final String URL_CREAR_PRODUCTO = "http://antoniopostigo.es/Slim2-ok/api/anadir/producto/lista";
+
+    public static final String URL_EDITAR_PRODUCTO = "http://antoniopostigo.es/Slim2-ok/api/editar/producto";
 
     public static final String URL_LIMPIAR_LISTA = "http://antoniopostigo.es/Slim2-ok/api/eliminar/productos/lista";
 
@@ -72,9 +79,23 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
         lista_productos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Usuario usuario = (Usuario) lista_productos.getAdapter().getItem(position);
+                Producto producto = (Producto) lista_productos.getAdapter().getItem(position);
             }
         });
+
+        lista_productos.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Producto producto = (Producto) lista_productos.getAdapter().getItem(position);
+                posicion_producto_editar = position;
+
+                openContextMenu(lista_productos);
+
+                return true;
+            }
+        });
+
+        registerForContextMenu(lista_productos);
     }
 
     @Override
@@ -101,6 +122,27 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
             alert.show();
 
         }
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo)
+    {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_lista_productos_long_click, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item){
+        Producto producto_pulsado = productos_lista.get(posicion_producto_editar);
+
+        if(item.getItemId()==R.id.editar_producto){
+            Toast.makeText(getApplicationContext(),"-->"+posicion_producto_editar,Toast.LENGTH_LONG).show();
+            crearDialogEditarProducto(producto_pulsado.getId_producto(), producto_pulsado.getNombre_producto(), producto_pulsado.getPrecio(), producto_pulsado.getCantidad());
+        }else{
+            return false;
+        }
+        return true;
     }
 
     private void cogerProductos(String id_producto) {
@@ -146,6 +188,97 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
                     myAdapter.notifyDataSetChanged();
                     //datosUsuario.setTelefono(Integer.parseInt(data_user.getString("telefono")));
 
+                } catch (JSONException e) {
+                    Toast.makeText(getApplicationContext(), "error: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                progreso.dismiss();
+                Toast.makeText(getApplicationContext(), responseString, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void crearProducto(String nombre_producto, int cantidad_producto, final double precio_producto) {
+        final ProgressDialog progreso = new ProgressDialog(getApplicationContext());
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams envio_nueva_lista = new RequestParams();
+        envio_nueva_lista.put("nombre", nombre_producto);
+        envio_nueva_lista.put("cantidad", cantidad_producto);
+        envio_nueva_lista.put("precio", precio_producto);
+        envio_nueva_lista.put("id_lista", datosLista_id_lista);
+        final Producto producto_anadido = new Producto();
+        producto_anadido.setNombre_producto(nombre_producto);
+        producto_anadido.setPrecio(precio_producto);
+        producto_anadido.setCantidad(cantidad_producto);
+
+        client.post(URL_CREAR_PRODUCTO, envio_nueva_lista, new JsonHttpResponseHandler(){
+            @Override
+            public void onStart() {
+                super.onStart();
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                progreso.dismiss();
+                String estado = "";
+                int id_producto_creado;
+
+                try {
+                    estado = response.getString("status");
+                    id_producto_creado = Integer.parseInt(response.getString("data"));
+
+                    if (estado.length()>0) {
+                        Toast.makeText(getApplicationContext(), "Resultado " + estado, Toast.LENGTH_SHORT).show();
+                        producto_anadido.setId_producto(id_producto_creado);
+
+                        productos_lista.add(producto_anadido);
+
+                        myAdapter.notifyDataSetChanged();
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(getApplicationContext(), "error: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                progreso.dismiss();
+                Toast.makeText(getApplicationContext(), responseString, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void limpiarLista() {
+        final ProgressDialog progreso = new ProgressDialog(getApplicationContext());
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams envio_limpiar_lista = new RequestParams();
+        envio_limpiar_lista.put("id_lista", datosLista_id_lista);
+
+        client.post(URL_LIMPIAR_LISTA, envio_limpiar_lista, new JsonHttpResponseHandler(){
+            @Override
+            public void onStart() {
+                super.onStart();
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                progreso.dismiss();
+                String estado = "";
+
+                try {
+                    estado = response.getString("status");
+
+                    if (estado.length()>0) {
+                        Toast.makeText(getApplicationContext(), "Resultado " + estado, Toast.LENGTH_SHORT).show();
+                        productos_lista.clear();
+
+                        myAdapter.notifyDataSetChanged();
+                    }
                 } catch (JSONException e) {
                     Toast.makeText(getApplicationContext(), "error: "+e.getMessage(), Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
@@ -211,10 +344,8 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
 
         alertDialogBuilder.setView(layout);
         alertDialogBuilder.setTitle("AÑADIR PRODUCTO");
-        // alertDialogBuilder.setMessage("Input Student ID");
         alertDialogBuilder.setCustomTitle(tv);
 
-        // alertDialogBuilder.setMessage(message);
         alertDialogBuilder.setCancelable(false);
 
         // Setting Negative "Cancel" Button
@@ -257,53 +388,117 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
         }
     }
 
-    private void crearProducto(String nombre_producto, int cantidad_producto, double precio_producto) {
-        final ProgressDialog progreso = new ProgressDialog(getApplicationContext());
-        AsyncHttpClient client = new AsyncHttpClient();
-        RequestParams envio_nueva_lista = new RequestParams();
-        envio_nueva_lista.put("nombre", nombre_producto);
-        envio_nueva_lista.put("cantidad", cantidad_producto);
-        envio_nueva_lista.put("precio", precio_producto);
-        envio_nueva_lista.put("id_lista", datosLista_id_lista);
+    private void crearDialogEditarProducto(final int id_producto, final String nombre_producto, double precio_producto, int cantidad_producto) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
-        client.post(URL_CREAR_PRODUCTO, envio_nueva_lista, new JsonHttpResponseHandler(){
-            @Override
-            public void onStart() {
-                super.onStart();
-            }
+        LinearLayout layout = new LinearLayout(this);
+        LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setLayoutParams(parms);
 
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                progreso.dismiss();
-                String estado = "";
+        layout.setGravity(Gravity.CLIP_VERTICAL);
+        layout.setPadding(2, 2, 2, 2);
 
-                try {
-                    estado = response.getString("status");
+        TextView tv = new TextView(this);
+        tv.setText("EDITAR PRODUCTO");
+        tv.setPadding(40, 40, 40, 40);
+        tv.setGravity(Gravity.CENTER);
+        tv.setTextSize(20);
 
-                    if (estado.length()>0) {
-                        Toast.makeText(getApplicationContext(), "Resultado " + estado, Toast.LENGTH_SHORT).show();
-                    }
-                } catch (JSONException e) {
-                    Toast.makeText(getApplicationContext(), "error: "+e.getMessage(), Toast.LENGTH_SHORT).show();
-                    e.printStackTrace();
-                }
-            }
+        final EditText edt_nom_pro = new EditText(this);
+        edt_nom_pro.setText(nombre_producto);
+        TextView txv_nom_pro = new TextView(this);
+        txv_nom_pro.setText("Nombre producto:");
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                progreso.dismiss();
-                Toast.makeText(getApplicationContext(), responseString, Toast.LENGTH_SHORT).show();
+        final EditText edt_pro_cant = new EditText(this);
+        edt_pro_cant.setInputType(InputType.TYPE_CLASS_NUMBER);
+        edt_pro_cant.setText("1");
+        edt_pro_cant.setText(String.valueOf(cantidad_producto));
+        TextView txv_pro_cant = new TextView(this);
+        txv_pro_cant.setText("Cantidad:");
+
+        final EditText edt_pro_prec = new EditText(this);
+        edt_pro_prec.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        edt_pro_prec.setText("0");
+        edt_pro_prec.setText(String.valueOf(precio_producto));
+        TextView txv_pro_prec = new TextView(this);
+        txv_pro_prec.setText("Precio:");
+
+        LinearLayout.LayoutParams tv1Params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        tv1Params.bottomMargin = 5;
+        LinearLayout.LayoutParams tv2Params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        tv2Params.topMargin = 5;
+        tv2Params.bottomMargin = 5;
+        LinearLayout.LayoutParams tv3Params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        tv3Params.topMargin = 5;
+        tv3Params.bottomMargin = 5;
+
+        layout.addView(txv_nom_pro, tv1Params);
+        layout.addView(edt_nom_pro, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        layout.addView(txv_pro_cant, tv2Params);
+        layout.addView(edt_pro_cant, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        layout.addView(txv_pro_prec, tv3Params);
+        layout.addView(edt_pro_prec, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+        alertDialogBuilder.setView(layout);
+        alertDialogBuilder.setTitle("AÑADIR PRODUCTO");
+        alertDialogBuilder.setCustomTitle(tv);
+
+        alertDialogBuilder.setCancelable(false);
+
+        // Setting Negative "Cancel" Button
+        alertDialogBuilder.setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                dialog.cancel();
             }
         });
+
+        // Setting Positive "OK" Button
+        alertDialogBuilder.setPositiveButton("EDITAR PRODUCTO", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                try {
+                    /*int cant_pro = 1;
+                    double prec_pro = 0;
+
+                    if (!edt_nom_pro.getText().toString().isEmpty()){
+                        if (!edt_pro_cant.getText().toString().isEmpty()){
+                            cant_pro = Integer.parseInt(edt_pro_cant.getText().toString());
+                        }
+                        if (!edt_pro_prec.getText().toString().isEmpty()){
+                            prec_pro = Double.parseDouble(edt_pro_prec.getText().toString());
+                        }
+                        editarProducto(id_producto, nombre_producto, cant_pro, prec_pro);
+                    }*/
+                    Toast.makeText(getApplicationContext(), "Todavia no esta", Toast.LENGTH_SHORT).show();
+                }catch (Exception e){
+                    Toast.makeText(getApplicationContext(), "ERROR al editar el producto", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        try {
+            alertDialog.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    private void limpiarLista() {
+    private void editarProducto(int id_producto, String nombre_producto, int cant_pro, double prec_pro) {
         final ProgressDialog progreso = new ProgressDialog(getApplicationContext());
         AsyncHttpClient client = new AsyncHttpClient();
-        RequestParams envio_limpiar_lista = new RequestParams();
-        envio_limpiar_lista.put("id_lista", datosLista_id_lista);
+        RequestParams envio_editar_producto = new RequestParams();
+        envio_editar_producto.put("id_producto", id_producto);
+        envio_editar_producto.put("nombre", nombre_producto);
+        envio_editar_producto.put("cantidad", cant_pro);
+        envio_editar_producto.put("precio", prec_pro);
+        final Producto producto_editar = new Producto();
+        producto_editar.setNombre_producto(nombre_producto);
+        producto_editar.setPrecio(prec_pro);
+        producto_editar.setCantidad(cant_pro);
 
-        client.post(URL_LIMPIAR_LISTA, envio_limpiar_lista, new JsonHttpResponseHandler(){
+        client.post(URL_EDITAR_PRODUCTO, envio_editar_producto, new JsonHttpResponseHandler(){
             @Override
             public void onStart() {
                 super.onStart();
@@ -313,12 +508,19 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 progreso.dismiss();
                 String estado = "";
+                int id_producto_creado;
 
                 try {
                     estado = response.getString("status");
+                    id_producto_creado = Integer.parseInt(response.getString("data"));
 
                     if (estado.length()>0) {
                         Toast.makeText(getApplicationContext(), "Resultado " + estado, Toast.LENGTH_SHORT).show();
+                        /*producto_editar.setId_producto(id_producto_creado);
+
+                        productos_lista.add(producto_anadido);
+
+                        myAdapter.notifyDataSetChanged();*/
                     }
                 } catch (JSONException e) {
                     Toast.makeText(getApplicationContext(), "error: "+e.getMessage(), Toast.LENGTH_SHORT).show();

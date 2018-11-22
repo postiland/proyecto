@@ -49,6 +49,8 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
 
     private int id_lista_borrar = 0;
 
+    private int id_posicion_lista = 0;
+
     private ArrayList<Lista> listas_usuario;
     ArrayAdapter<Lista> myAdapter;
 
@@ -94,6 +96,7 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 Lista lista = (Lista) lista_listas.getAdapter().getItem(position);
+                id_posicion_lista = position;
 
                 if (String.valueOf(lista.getId_usuario()).equals(datosUsuario_id_usuario)){
                     id_lista_borrar = lista.getId_lista();
@@ -119,14 +122,15 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
 
     @Override
     public boolean onContextItemSelected(MenuItem item){
-        //Toast.makeText(getApplicationContext(),"-->"+item.toString(),Toast.LENGTH_LONG).show();
+        Lista lista_pulsada = listas_usuario.get(id_posicion_lista);
+
         if (id_lista_borrar == 0){
             Toast.makeText(getApplicationContext(),"ERROR obteniendo la id a borrar",Toast.LENGTH_LONG).show();
             return false;
         }
 
         if(item.getItemId()==R.id.editar_lista){
-            crearDialogEditarLista();
+            crearDialogEditarLista(lista_pulsada.getNombre());
         }
         else if(item.getItemId()==R.id.eliminar_lista){
             borrarLista();
@@ -178,7 +182,6 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
                                 myAdapter.notifyDataSetChanged();
                             }
                         }
-                        Toast.makeText(getApplicationContext(), "Cantidad " + listas_usuario.size(), Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     Toast.makeText(getApplicationContext(), "error: "+e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -249,12 +252,13 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
         });
     }
 
-    private void crearLista(String nombre_lista) {
+    private void crearLista(final String nombre_lista) {
         final ProgressDialog progreso = new ProgressDialog(getApplicationContext());
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams envio_nueva_lista = new RequestParams();
         envio_nueva_lista.put("nombre", nombre_lista);
         envio_nueva_lista.put("id_usuario", datosUsuario_id_usuario);
+        final Lista listaAnadir = new Lista();
 
         client.post(URL_CREAR_LISTA, envio_nueva_lista, new JsonHttpResponseHandler(){
             @Override
@@ -266,14 +270,20 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 progreso.dismiss();
                 String estado = "";
+                int id_lista_creada;
 
                 try {
                     estado = response.getString("status");
+                    id_lista_creada = Integer.parseInt(response.getString("data"));
 
                     if (estado.length()>0) {
-                        Toast.makeText(getApplicationContext(), "Resultado " + estado, Toast.LENGTH_SHORT).show();
-                        cogerListas();
-                        lista_listas.setAdapter(myAdapter);
+                        Toast.makeText(getApplicationContext(), "Resultado " + id_lista_creada, Toast.LENGTH_SHORT).show();
+                        listaAnadir.setId_lista(id_lista_creada);
+                        listaAnadir.setNombre(nombre_lista);
+                        listaAnadir.setId_usuario(Integer.parseInt(datosUsuario_id_usuario));
+                        listas_usuario.add(listaAnadir);
+
+                        myAdapter.notifyDataSetChanged();
                     }
                 } catch (JSONException e) {
                     Toast.makeText(getApplicationContext(), "error: "+e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -389,7 +399,7 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
         }
     }
 
-    private void crearDialogEditarLista() {
+    private void crearDialogEditarLista(String nombre_lista_pulsada) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
         LinearLayout layout = new LinearLayout(this);
@@ -407,6 +417,7 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
         tv.setTextSize(20);
 
         final EditText et = new EditText(this);
+        et.setText(nombre_lista_pulsada);
         TextView tv1 = new TextView(this);
         tv1.setText("Nombre lista:");
 
