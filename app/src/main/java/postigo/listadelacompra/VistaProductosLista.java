@@ -137,7 +137,6 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
         Producto producto_pulsado = productos_lista.get(posicion_producto_editar);
 
         if(item.getItemId()==R.id.editar_producto){
-            Toast.makeText(getApplicationContext(),"-->"+posicion_producto_editar,Toast.LENGTH_LONG).show();
             crearDialogEditarProducto(producto_pulsado.getId_producto(), producto_pulsado.getNombre_producto(), producto_pulsado.getPrecio(), producto_pulsado.getCantidad());
         }else{
             return false;
@@ -388,7 +387,7 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
         }
     }
 
-    private void crearDialogEditarProducto(final int id_producto, final String nombre_producto, double precio_producto, int cantidad_producto) {
+    private void crearDialogEditarProducto(final int id_producto, final String nombre_producto, final double precio_producto, final int cantidad_producto) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
         LinearLayout layout = new LinearLayout(this);
@@ -457,19 +456,22 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
         alertDialogBuilder.setPositiveButton("EDITAR PRODUCTO", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 try {
-                    /*int cant_pro = 1;
-                    double prec_pro = 0;
+                    int cant_pro = cantidad_producto;
+                    double prec_pro = precio_producto;
+                    String nom_pro = nombre_producto;
 
                     if (!edt_nom_pro.getText().toString().isEmpty()){
-                        if (!edt_pro_cant.getText().toString().isEmpty()){
-                            cant_pro = Integer.parseInt(edt_pro_cant.getText().toString());
-                        }
-                        if (!edt_pro_prec.getText().toString().isEmpty()){
-                            prec_pro = Double.parseDouble(edt_pro_prec.getText().toString());
-                        }
-                        editarProducto(id_producto, nombre_producto, cant_pro, prec_pro);
-                    }*/
-                    Toast.makeText(getApplicationContext(), "Todavia no esta", Toast.LENGTH_SHORT).show();
+                        nom_pro = edt_nom_pro.getText().toString();
+                    }
+                    if (!edt_pro_cant.getText().toString().isEmpty()){
+                        cant_pro = Integer.parseInt(edt_pro_cant.getText().toString());
+                    }
+                    if (!edt_pro_prec.getText().toString().isEmpty()){
+                        prec_pro = Double.parseDouble(edt_pro_prec.getText().toString());
+                    }
+                    editarProducto(id_producto, nom_pro, cant_pro, prec_pro);
+
+                    Toast.makeText(getApplicationContext(), id_producto+"\n"+nom_pro+"\n"+cant_pro+"\n"+prec_pro+"\n"+datosLista_id_lista, Toast.LENGTH_SHORT).show();
                 }catch (Exception e){
                     Toast.makeText(getApplicationContext(), "ERROR al editar el producto", Toast.LENGTH_SHORT).show();
                 }
@@ -485,7 +487,7 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
         }
     }
 
-    private void editarProducto(int id_producto, String nombre_producto, int cant_pro, double prec_pro) {
+    private void editarProducto(final int id_producto, final String nombre_producto, final int cant_pro, final double prec_pro) {
         final ProgressDialog progreso = new ProgressDialog(getApplicationContext());
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams envio_editar_producto = new RequestParams();
@@ -493,7 +495,9 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
         envio_editar_producto.put("nombre", nombre_producto);
         envio_editar_producto.put("cantidad", cant_pro);
         envio_editar_producto.put("precio", prec_pro);
+        envio_editar_producto.put("id_lista", datosLista_id_lista);
         final Producto producto_editar = new Producto();
+        producto_editar.setId_producto(id_producto);
         producto_editar.setNombre_producto(nombre_producto);
         producto_editar.setPrecio(prec_pro);
         producto_editar.setCantidad(cant_pro);
@@ -508,14 +512,25 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 progreso.dismiss();
                 String estado = "";
-                int id_producto_creado;
 
                 try {
                     estado = response.getString("status");
-                    id_producto_creado = Integer.parseInt(response.getString("data"));
+
 
                     if (estado.length()>0) {
                         Toast.makeText(getApplicationContext(), "Resultado " + estado, Toast.LENGTH_SHORT).show();
+
+                        for (int i=0; i<productos_lista.size(); i++){
+                            Producto recorriendo_productos = productos_lista.get(i);
+
+                            if (recorriendo_productos.getId_producto() == id_producto){
+                                productos_lista.get(i).setNombre_producto(nombre_producto);
+                                productos_lista.get(i).setPrecio(prec_pro);
+                                productos_lista.get(i).setCantidad(cant_pro);
+
+                                myAdapter.notifyDataSetChanged();
+                            }
+                        }
                         /*producto_editar.setId_producto(id_producto_creado);
 
                         productos_lista.add(producto_anadido);

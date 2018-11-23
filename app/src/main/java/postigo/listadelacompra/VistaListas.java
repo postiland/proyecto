@@ -34,6 +34,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -299,7 +300,7 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
         });
     }
 
-    private void editarLista(String nombre_lista) {
+    private void editarLista(final String nombre_lista) {
         final ProgressDialog progreso = new ProgressDialog(getApplicationContext());
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams envio_nueva_lista = new RequestParams();
@@ -322,6 +323,16 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
 
                     if (estado.length()>0) {
                         Toast.makeText(getApplicationContext(), "Resultado " + estado, Toast.LENGTH_SHORT).show();
+
+                        for (int i=0; i<listas_usuario.size(); i++){
+                            Lista recorriendo_lista = listas_usuario.get(i);
+
+                            if (recorriendo_lista.getId_lista() == id_lista_borrar){
+                                listas_usuario.get(i).setNombre(nombre_lista);
+
+                                myAdapter.notifyDataSetChanged();
+                            }
+                        }
 
                     }
                 } catch (JSONException e) {
