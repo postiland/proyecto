@@ -35,6 +35,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -55,11 +57,17 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
     private ArrayList<Lista> listas_usuario;
     ArrayAdapter<Lista> myAdapter;
 
+    private Pattern modeloEmail = Pattern
+            .compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+                    + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
+
     public static final String URL_COGER_LISTAS = "http://antoniopostigo.es/Slim2-ok/api/id_usuario/obtener/id_listas";
 
     public static final String URL_CREAR_LISTA = "http://antoniopostigo.es/Slim2-ok/api/crear/lista";
 
     public static final String URL_BORRAR_LISTA = "http://antoniopostigo.es/Slim2-ok/api/eliminar/lista";
+
+    public static final String URL_INVITAR_USUARIO_LISTA = "http://antoniopostigo.es/Slim2-ok/api/anadir/usuario/lista";
 
     public static final String URL_EDITAR_LISTA = "http://antoniopostigo.es/Slim2-ok/api/editar/lista";
 
@@ -135,6 +143,9 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
         }
         else if(item.getItemId()==R.id.eliminar_lista){
             borrarLista();
+        }
+        else if(item.getItemId()==R.id.invitar_usuario_lista){
+            crearDialogInvitarUsuarioLista();
         }else{
             return false;
         }
@@ -146,6 +157,53 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
         if (v == crear_lista) {
             crearDialogCrearLista();
         }
+    }
+
+    private void invitarUsuarioLista(String email_usuario_invitar) {
+        final ProgressDialog progreso = new ProgressDialog(this);
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams envio_id_lista = new RequestParams();
+        envio_id_lista.put("id_lista", id_lista_borrar);
+        envio_id_lista.put("email_usuario", email_usuario_invitar);
+
+        client.post(URL_INVITAR_USUARIO_LISTA, envio_id_lista, new JsonHttpResponseHandler(){
+            @Override
+            public void onStart() {
+                super.onStart();
+                progreso.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progreso.setMessage("Conectando . . .");
+                progreso.setCancelable(false);
+                progreso.show();
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                progreso.dismiss();
+                String estado = "";
+                String resultadoOK;
+                Lista listaBorrar = new Lista();
+
+                try {
+                    estado = response.getString("status");
+                    resultadoOK = response.getString("data");
+
+                    if (resultadoOK.length() == 1) {
+                        Toast.makeText(getApplicationContext(), "Usuario añadido a la lista!", Toast.LENGTH_SHORT).show();
+                    }else {
+                        Toast.makeText(getApplicationContext(), "Lo siento, el usuario no existe!", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(getApplicationContext(), "error: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                progreso.dismiss();
+                Toast.makeText(getApplicationContext(), responseString, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void borrarLista() {
@@ -457,6 +515,77 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
             public void onClick(DialogInterface dialog, int which) {
                 try {
                     editarLista(et.getText().toString());
+                }catch (Exception e){
+                    Toast.makeText(getApplicationContext(), "ERROR AL DAR OK", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        try {
+            alertDialog.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void crearDialogInvitarUsuarioLista() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+        LinearLayout layout = new LinearLayout(this);
+        LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setLayoutParams(parms);
+
+        layout.setGravity(Gravity.CLIP_VERTICAL);
+        layout.setPadding(2, 2, 2, 2);
+
+        TextView tv = new TextView(this);
+        tv.setText("INVITAR USUARIO A LA LISTA");
+        tv.setPadding(40, 40, 40, 40);
+        tv.setGravity(Gravity.CENTER);
+        tv.setTextSize(20);
+
+        final EditText et = new EditText(this);
+        TextView tv1 = new TextView(this);
+        tv1.setText("Email de usuario:");
+
+        LinearLayout.LayoutParams tv1Params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        tv1Params.bottomMargin = 5;
+        layout.addView(tv1, tv1Params);
+        layout.addView(et, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+        alertDialogBuilder.setView(layout);
+        alertDialogBuilder.setTitle("INVITAR USUARIO A LA LISTA");
+        alertDialogBuilder.setCustomTitle(tv);
+
+        // alertDialogBuilder.setMessage(message);
+        alertDialogBuilder.setCancelable(false);
+
+        // Setting Negative "Cancel" Button
+        alertDialogBuilder.setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                dialog.cancel();
+            }
+        });
+
+        // Setting Positive "OK" Button
+        alertDialogBuilder.setPositiveButton("INVITAR", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                try {
+                    String email_usuario = et.getText().toString();
+
+                    Matcher mather = modeloEmail.matcher(email_usuario);
+                    if (!mather.find()){
+                        Toast.makeText(getApplicationContext(), "Debes introducir un email válido", Toast.LENGTH_SHORT).show();
+                    }else {
+                        if (email_usuario.isEmpty()){
+                            Toast.makeText(getApplicationContext(), "Debes introducir un email!", Toast.LENGTH_SHORT).show();
+                        }else {
+                            invitarUsuarioLista(email_usuario);
+                        }
+                    }
                 }catch (Exception e){
                     Toast.makeText(getApplicationContext(), "ERROR AL DAR OK", Toast.LENGTH_SHORT).show();
                 }
