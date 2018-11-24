@@ -142,7 +142,20 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
             crearDialogEditarLista(lista_pulsada.getNombre());
         }
         else if(item.getItemId()==R.id.eliminar_lista){
-            borrarLista();
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("¿Estás seguro de que deseas eliminar esta lista?")
+                    .setTitle("ELIMINAR LISTA")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            borrarLista();
+                        }
+                    })
+                    .setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
         }
         else if(item.getItemId()==R.id.invitar_usuario_lista){
             crearDialogInvitarUsuarioLista();
