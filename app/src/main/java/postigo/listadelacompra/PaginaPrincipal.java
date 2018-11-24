@@ -80,7 +80,7 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    private void comprobarContrasena(String txv_contrasena){
+    private void comprobacionesInicioSesion(String txv_contrasena){
         if (!datosUsuario.getContrasena().isEmpty()){
             if (datosUsuario.getContrasena().equals(txv_contrasena)){
                 Intent intent = new Intent(getBaseContext(), VistaListas.class);
@@ -123,8 +123,13 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
 
                         datosUsuario.setContrasena(data_user.getString("contrasena"));
                         datosUsuario.setId_usuario(Integer.parseInt(data_user.getString("id_usuario")));
+                        datosUsuario.setCuenta_activa(Integer.parseInt(data_user.getString("cuenta_activa")));
 
-                        comprobarContrasena(txv_contrasena);
+                        if (datosUsuario.getCuenta_activa() == 0){
+                            Toast.makeText(getApplicationContext(), "Debes validar el email antes de iniciar sesión!", Toast.LENGTH_SHORT).show();
+                        }else {
+                            comprobacionesInicioSesion(txv_contrasena);
+                        }
                     }else {
                         Toast.makeText(getApplicationContext(), "El usuario no existe", Toast.LENGTH_SHORT).show();
                     }

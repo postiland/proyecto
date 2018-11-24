@@ -10,6 +10,7 @@ public class Usuario {
     private String email;
     private int telefono;
     private String contrasena;
+    private int cuenta_activa;
 
     public Usuario(String nombre, String apellidos, String email, int telefono, String contrasena) {
         this.nombre = nombre;
@@ -67,6 +68,14 @@ public class Usuario {
 
     public void setContrasena(String contrasena) {
         this.contrasena = contrasena;
+    }
+
+    public void setCuenta_activa(int cuenta_activa) {
+        this.cuenta_activa = cuenta_activa;
+    }
+
+    public int getCuenta_activa() {
+        return cuenta_activa;
     }
 
     @Override
