@@ -2,11 +2,14 @@ package postigo.listadelacompra;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -16,11 +19,22 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import cz.msebera.android.httpclient.Header;
 
 public class PaginaPrincipal extends AppCompatActivity implements View.OnClickListener{
 
     private Usuario datosUsuario;
+
+    private ImageView icono_error_email;
+
+    private TextView txv_error_email;
+
+    private ImageView icono_error_contrasena;
+
+    private TextView txv_error_contrasena;
 
     public static final String URL_COMPROBAR_USUARIO = "http://antoniopostigo.es/Slim2-ok/api/usuario/email";
 
@@ -47,6 +61,16 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
         email = (EditText) findViewById(R.id.txv_email_usuario);
         contrasena = (EditText) findViewById(R.id.txv_contrasena_usuario);
 
+        icono_error_email = (ImageView) findViewById(R.id.imv_icono_error_email);
+        icono_error_email.setVisibility(View.INVISIBLE);
+        txv_error_email = (TextView) findViewById(R.id.txv_error_email);
+
+        icono_error_contrasena = (ImageView) findViewById(R.id.imv_icono_error_contrasena);
+        icono_error_contrasena.setVisibility(View.INVISIBLE);
+        txv_error_contrasena = (TextView) findViewById(R.id.txv_error_contrasena);
+
+
+
         nuevo_usuario = getIntent().getStringExtra("EMAIL_NUEVO_USUARIO");
         if (nuevo_usuario != null){
             if (nuevo_usuario.length() > 0) {
@@ -58,6 +82,10 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         if (v==btn_login){
+            icono_error_email.setVisibility(View.INVISIBLE);
+            txv_error_email.setText("");
+            icono_error_contrasena.setVisibility(View.INVISIBLE);
+            txv_error_contrasena.setText("");
             comprobarLogin();
         }
 
@@ -70,11 +98,23 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
     private void comprobarLogin() {
         String txv_email = email.getText().toString();
         String txv_contrasena = contrasena.getText().toString();
+        Pattern modeloEmail = Pattern
+                .compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+                        + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
+        Matcher mather = modeloEmail.matcher(txv_email);
 
         if (txv_email.isEmpty()){
-            Toast.makeText(getApplicationContext(), "Debes introducir un email", Toast.LENGTH_SHORT).show();
+            icono_error_email.setVisibility(View.VISIBLE);
+            txv_error_email.setText("Debes introducir un email");
+            txv_error_email.setTextColor(Color.RED);
+        }else if (!mather.find()) {
+            icono_error_email.setVisibility(View.VISIBLE);
+            txv_error_email.setText("Debes introducir un email valido");
+            txv_error_email.setTextColor(Color.RED);
         }else if (txv_contrasena.isEmpty()) {
-            Toast.makeText(getApplicationContext(), "Debes introducir una contraseña", Toast.LENGTH_SHORT).show();
+            icono_error_contrasena.setVisibility(View.VISIBLE);
+            txv_error_contrasena.setText("Debes introducir una contraseña");
+            txv_error_contrasena.setTextColor(Color.RED);
         }else {
             cogerUsuario(txv_email, txv_contrasena);
         }
@@ -87,7 +127,9 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
                 intent.putExtra("ID_USUARIO", String.valueOf(datosUsuario.getId_usuario()));
                 startActivity(intent);
             }else {
-                Toast.makeText(getApplicationContext(), "La contraseña es incorrecta", Toast.LENGTH_SHORT).show();
+                icono_error_contrasena.setVisibility(View.VISIBLE);
+                txv_error_contrasena.setText("Contraseña incorrecta");
+                txv_error_contrasena.setTextColor(Color.RED);
             }
         }
     }
@@ -126,12 +168,16 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
                         datosUsuario.setCuenta_activa(Integer.parseInt(data_user.getString("cuenta_activa")));
 
                         if (datosUsuario.getCuenta_activa() == 0){
-                            Toast.makeText(getApplicationContext(), "Debes validar el email antes de iniciar sesión!", Toast.LENGTH_SHORT).show();
+                            icono_error_email.setVisibility(View.VISIBLE);
+                            txv_error_email.setText("Debes validar el email antes de iniciar sesión");
+                            txv_error_email.setTextColor(Color.RED);
                         }else {
                             comprobacionesInicioSesion(txv_contrasena);
                         }
                     }else {
-                        Toast.makeText(getApplicationContext(), "El usuario no existe", Toast.LENGTH_SHORT).show();
+                        icono_error_email.setVisibility(View.VISIBLE);
+                        txv_error_email.setText("El email introducido no existe");
+                        txv_error_email.setTextColor(Color.RED);
                     }
 
                 } catch (JSONException e) {
