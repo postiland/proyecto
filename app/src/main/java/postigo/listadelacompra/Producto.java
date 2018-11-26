@@ -5,6 +5,7 @@ public class Producto {
     private String nombre_producto;
     private double precio;
     private int cantidad;
+    private int comprado;
 
     public Producto() {
     }
@@ -39,6 +40,14 @@ public class Producto {
 
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
+    }
+
+    public int getComprado() {
+        return comprado;
+    }
+
+    public void setComprado(int comprado) {
+        this.comprado = comprado;
     }
 
     @Override

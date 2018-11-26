@@ -1,17 +1,21 @@
 package postigo.listadelacompra;
 
 import android.app.ProgressDialog;
+import android.app.Service;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.view.ContextMenu;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -61,6 +65,8 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
 
     public static final String URL_EDITAR_PRODUCTO = "http://antoniopostigo.es/Slim2-ok/api/editar/producto";
 
+    public static final String URL_EDITAR_PRODUCTO_COMPRADO = "http://antoniopostigo.es/Slim2-ok/api/editar/producto/comprado";
+
     public static final String URL_LIMPIAR_LISTA = "http://antoniopostigo.es/Slim2-ok/api/eliminar/productos/lista";
 
     @Override
@@ -84,14 +90,48 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
         icono_ok.setVisibility(View.INVISIBLE);
         txv_mensajes = (TextView) findViewById(R.id.txv_mensajes_productos);
 
+        cogerProductos(datosLista_id_lista);
+
         productos_lista=new ArrayList<Producto>();
-        myAdapter = new ArrayAdapter<Producto>(this, android.R.layout.simple_list_item_1, productos_lista);
+        myAdapter = new ArrayAdapter<Producto>(this, R.layout.vista_item_producto, productos_lista){
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                
+                LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Service.LAYOUT_INFLATER_SERVICE);
+                View itemLista = inflater.inflate(R.layout.vista_item_producto, null);
+
+                ViewHolder mContenedor = new ViewHolder();
+                mContenedor.producto = (TextView) itemLista.findViewById(R.id.txv_nom_pro_lis);
+                mContenedor.cantidad = (TextView) itemLista.findViewById(R.id.txv_cant_pro_list);
+                mContenedor.precio = (TextView) itemLista.findViewById(R.id.txv_prec_pro_list);
+
+                mContenedor.producto.setText(productos_lista.get(position).getNombre_producto());
+                mContenedor.cantidad.setText(String.valueOf(productos_lista.get(position).getCantidad()));
+                mContenedor.precio.setText(String.valueOf(productos_lista.get(position).getPrecio()));
+
+                itemLista.setTag(mContenedor);
+
+                if (productos_lista.get(position).getComprado() == 1){
+                    itemLista.setBackgroundColor(Color.LTGRAY);
+                }
+
+                return itemLista;
+            }
+        };
         lista_productos.setAdapter(myAdapter);
 
         lista_productos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Producto producto = (Producto) lista_productos.getAdapter().getItem(position);
+
+                if (producto.getComprado() == 1) {
+                    view.setBackgroundColor(Color.WHITE);
+                    cambiarEstadoComprado(0, producto.getId_producto());
+                }else{
+                    view.setBackgroundColor(Color.LTGRAY);
+                    cambiarEstadoComprado(1, producto.getId_producto());
+                }
             }
         });
 
@@ -108,8 +148,58 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
         });
 
         registerForContextMenu(lista_productos);
+    }
 
-        cogerProductos(datosLista_id_lista);
+    private void cambiarEstadoComprado(final int comprado, final int id_producto) {
+        final ProgressDialog progreso = new ProgressDialog(getApplicationContext());
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams envio_editar_producto = new RequestParams();
+        envio_editar_producto.put("comprado", comprado);
+        envio_editar_producto.put("id_producto", id_producto);
+        envio_editar_producto.put("id_lista", datosLista_id_lista);
+
+        client.post(URL_EDITAR_PRODUCTO_COMPRADO, envio_editar_producto, new JsonHttpResponseHandler(){
+            @Override
+            public void onStart() {
+                super.onStart();
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                progreso.dismiss();
+                String estado = "";
+
+                try {
+                    estado = response.getString("status");
+
+                    for (int i=0; i<productos_lista.size(); i++){
+                        Producto recorriendo_productos = productos_lista.get(i);
+
+                        if (recorriendo_productos.getId_producto() == id_producto){
+                            productos_lista.get(i).setComprado(comprado);
+
+                            myAdapter.notifyDataSetChanged();
+                        }
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(getApplicationContext(), "error: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                progreso.dismiss();
+                Toast.makeText(getApplicationContext(), responseString, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+    private static class ViewHolder {
+        TextView producto;
+        TextView cantidad;
+        TextView precio;
     }
 
     private void mostrarMensajeInfo(String mensaje, boolean esError){
@@ -207,6 +297,7 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
                         producto.setNombre_producto(data_user.getString("nombre"));
                         producto.setPrecio(Double.parseDouble(data_user.getString("precio")));
                         producto.setCantidad(Integer.parseInt(data_user.getString("cantidad")));
+                        producto.setComprado(Integer.parseInt(data_user.getString("comprado")));
 
                         productos_lista.add(producto);
 
@@ -554,7 +645,7 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
 
                                 myAdapter.notifyDataSetChanged();
 
-                                mostrarMensajeInfo("Producto editado", true);
+                                mostrarMensajeInfo("Producto editado", false);
                             }
                         }
                     }

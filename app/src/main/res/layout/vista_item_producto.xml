@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/txv_nom_prod"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/txv_nom_pro_lis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <TextView
+        android:id="@+id/txv_prec_pro_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="16dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/txv_nom_pro_lis"
+        app:layout_constraintTop_toBottomOf="@+id/txv_nom_pro_lis" />
+
+    <TextView
+        android:id="@+id/txv_cant_pro_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.004"
+        app:layout_constraintStart_toEndOf="@+id/textView13"
+        app:layout_constraintTop_toBottomOf="@+id/txv_nom_pro_lis" />
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="€"
+        app:layout_constraintStart_toEndOf="@+id/txv_prec_pro_list"
+        app:layout_constraintTop_toBottomOf="@+id/txv_nom_pro_lis" />
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="12dp"
+        android:layout_marginTop="8dp"
+        android:text="Precio:"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toTopOf="@+id/txv_prec_pro_list"
+        app:layout_constraintStart_toStartOf="@+id/txv_prec_pro_list"
+        app:layout_constraintTop_toBottomOf="@+id/txv_nom_pro_lis"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/textView15"
+        android:layout_width="wrap_content"
+        android:layout_height="14dp"
+        android:layout_marginTop="8dp"
+        android:text="Cantidad:"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toTopOf="@+id/txv_prec_pro_list"
+        app:layout_constraintStart_toStartOf="@+id/txv_cant_pro_list"
+        app:layout_constraintTop_toBottomOf="@+id/txv_nom_pro_lis"
+        app:layout_constraintVertical_bias="0.666" />
+</android.support.constraint.ConstraintLayout>
