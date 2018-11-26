@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -54,6 +56,12 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
 
     private int id_posicion_lista = 0;
 
+    private ImageView icono_errores;
+
+    private ImageView icono_ok;
+
+    private TextView txv_mensajes;
+
     private ArrayList<Lista> listas_usuario;
     ArrayAdapter<Lista> myAdapter;
 
@@ -85,6 +93,12 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
 
         txv_nom_lis = (TextView) findViewById(R.id.txv_nombre_lista);
 
+        icono_errores = (ImageView) findViewById(R.id.imv_icono_errores_listas);
+        icono_errores.setVisibility(View.INVISIBLE);
+        icono_ok = (ImageView) findViewById(R.id.imv_icono_ok_listas);
+        icono_ok.setVisibility(View.INVISIBLE);
+        txv_mensajes = (TextView) findViewById(R.id.txv_mensajes_listas);
+
         cogerListas();
 
         myAdapter = new ArrayAdapter<Lista>(this, android.R.layout.simple_list_item_1, listas_usuario);
@@ -111,7 +125,7 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
                     id_lista_borrar = lista.getId_lista();
                     openContextMenu(lista_listas);
                 }else {
-                    Toast.makeText(getApplicationContext(), "Solo el propietario puede editar o eliminar una lista", Toast.LENGTH_SHORT).show();
+                    mostrarMensajeInfo("Solo el propietario puede editar o eliminar una lista", true);
                 }
 
                 return true;
@@ -119,6 +133,17 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
         });
 
         registerForContextMenu(lista_listas);
+    }
+
+    private void mostrarMensajeInfo(String mensaje, boolean esError){
+        if (esError) {
+            icono_errores.setVisibility(View.VISIBLE);
+            txv_mensajes.setTextColor(Color.RED);
+        }else {
+            icono_ok.setVisibility(View.VISIBLE);
+            txv_mensajes.setTextColor(Color.GREEN);
+        }
+        txv_mensajes.setText(mensaje);
     }
 
     @Override
@@ -134,7 +159,7 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
         Lista lista_pulsada = listas_usuario.get(id_posicion_lista);
 
         if (id_lista_borrar == 0){
-            Toast.makeText(getApplicationContext(),"ERROR obteniendo la id a borrar",Toast.LENGTH_LONG).show();
+            mostrarMensajeInfo("ERROR! Imposible borrar lista", true);
             return false;
         }
 
@@ -201,9 +226,9 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
                     resultadoOK = response.getString("data");
 
                     if (resultadoOK.length() == 1) {
-                        Toast.makeText(getApplicationContext(), "Usuario añadido a la lista!", Toast.LENGTH_SHORT).show();
+                        mostrarMensajeInfo("Usuario añadido a la lista", false);
                     }else {
-                        Toast.makeText(getApplicationContext(), "Lo siento, el usuario no existe!", Toast.LENGTH_SHORT).show();
+                        mostrarMensajeInfo("Lo sentimos, el usuario no existe", true);
                     }
                 } catch (JSONException e) {
                     Toast.makeText(getApplicationContext(), "error: "+e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -245,7 +270,7 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
                     estado = response.getString("status");
 
                     if (estado.length()>0) {
-                        Toast.makeText(getApplicationContext(), "Resultado " + estado, Toast.LENGTH_SHORT).show();
+                        mostrarMensajeInfo("Lista eliminada", false);
                         for(int i=0;i<listas_usuario.size();i++) {
                             listaBorrar = listas_usuario.get(i);
                             if (listaBorrar.getId_lista() == id_lista_borrar){
@@ -349,7 +374,7 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
                     id_lista_creada = Integer.parseInt(response.getString("data"));
 
                     if (estado.length()>0) {
-                        Toast.makeText(getApplicationContext(), "Resultado " + id_lista_creada, Toast.LENGTH_SHORT).show();
+                        mostrarMensajeInfo("Lista creada", false);
                         listaAnadir.setId_lista(id_lista_creada);
                         listaAnadir.setNombre(nombre_lista);
                         listaAnadir.setId_usuario(Integer.parseInt(datosUsuario_id_usuario));
@@ -393,7 +418,7 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
                     estado = response.getString("status");
 
                     if (estado.length()>0) {
-                        Toast.makeText(getApplicationContext(), "Resultado " + estado, Toast.LENGTH_SHORT).show();
+                        mostrarMensajeInfo("Lista editada", false);
 
                         for (int i=0; i<listas_usuario.size(); i++){
                             Lista recorriendo_lista = listas_usuario.get(i);
@@ -467,7 +492,7 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
                 try {
                     crearLista(et.getText().toString());
                 }catch (Exception e){
-                    Toast.makeText(getApplicationContext(), "ERROR AL DAR OK", Toast.LENGTH_SHORT).show();
+                    mostrarMensajeInfo("ERROR! Imposible crear lista", true);
                 }
             }
         });
@@ -529,7 +554,7 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
                 try {
                     editarLista(et.getText().toString());
                 }catch (Exception e){
-                    Toast.makeText(getApplicationContext(), "ERROR AL DAR OK", Toast.LENGTH_SHORT).show();
+                    mostrarMensajeInfo("ERROR! Imposible editar lista", true);
                 }
             }
         });
@@ -590,17 +615,18 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
                     String email_usuario = et.getText().toString();
 
                     Matcher mather = modeloEmail.matcher(email_usuario);
-                    if (!mather.find()){
-                        Toast.makeText(getApplicationContext(), "Debes introducir un email válido", Toast.LENGTH_SHORT).show();
+
+                    if (email_usuario.isEmpty()){
+                        mostrarMensajeInfo("Debes introducir un email!", true);
                     }else {
-                        if (email_usuario.isEmpty()){
-                            Toast.makeText(getApplicationContext(), "Debes introducir un email!", Toast.LENGTH_SHORT).show();
-                        }else {
+                        if (!mather.find()){
+                            mostrarMensajeInfo("Debes introducir un email válido", true);
+                        } else {
                             invitarUsuarioLista(email_usuario);
                         }
                     }
                 }catch (Exception e){
-                    Toast.makeText(getApplicationContext(), "ERROR AL DAR OK", Toast.LENGTH_SHORT).show();
+                    mostrarMensajeInfo("ERROR! Imposible invitar al usuario", true);
                 }
             }
         });

@@ -6,10 +6,49 @@
     android:layout_height="match_parent"
     tools:context=".VistaListas">
 
+    <TextView
+        android:id="@+id/txv_mensajes_listas"
+        android:layout_width="284dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="80dp"
+        android:layout_marginRight="80dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.142"
+        app:layout_constraintStart_toEndOf="@+id/imv_icono_errores_listas"
+        app:layout_constraintTop_toBottomOf="@+id/ltv_listas" />
+
+    <ImageView
+        android:id="@+id/imv_icono_errores_listas"
+        android:layout_width="24dp"
+        android:layout_height="27dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginLeft="44dp"
+        android:src="@mipmap/ic_launcher_foreground"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imv_icono_ok_listas"
+        app:srcCompat="@mipmap/ic_icono_error" />
+
+    <ImageView
+        android:id="@+id/imv_icono_ok_listas"
+        android:layout_width="24dp"
+        android:layout_height="27dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginLeft="44dp"
+        android:layout_marginTop="12dp"
+        android:src="@mipmap/ic_launcher_foreground"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ltv_listas"
+        app:srcCompat="@mipmap/ic_icono_ok" />
+
     <ListView
         android:id="@+id/ltv_listas"
         android:layout_width="368dp"
-        android:layout_height="429dp"
+        android:layout_height="397dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"

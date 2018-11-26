@@ -2,6 +2,7 @@ package postigo.listadelacompra;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -44,6 +46,12 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
 
     ListView lista_productos;
 
+    private ImageView icono_errores;
+
+    private ImageView icono_ok;
+
+    private TextView txv_mensajes;
+
     private ArrayList<Producto> productos_lista;
     ArrayAdapter<Producto> myAdapter;
 
@@ -70,7 +78,11 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
         btn_limpiar_lista=(Button) findViewById(R.id.btn_limpiar_lista);
         btn_limpiar_lista.setOnClickListener(this);
 
-        cogerProductos(datosLista_id_lista);
+        icono_errores = (ImageView) findViewById(R.id.imv_icono_error_productos);
+        icono_errores.setVisibility(View.INVISIBLE);
+        icono_ok = (ImageView) findViewById(R.id.imv_icono_ok_productos);
+        icono_ok.setVisibility(View.INVISIBLE);
+        txv_mensajes = (TextView) findViewById(R.id.txv_mensajes_productos);
 
         productos_lista=new ArrayList<Producto>();
         myAdapter = new ArrayAdapter<Producto>(this, android.R.layout.simple_list_item_1, productos_lista);
@@ -96,6 +108,21 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
         });
 
         registerForContextMenu(lista_productos);
+
+        cogerProductos(datosLista_id_lista);
+    }
+
+    private void mostrarMensajeInfo(String mensaje, boolean esError){
+        if (esError) {
+            icono_ok.setVisibility(View.INVISIBLE);
+            icono_errores.setVisibility(View.VISIBLE);
+            txv_mensajes.setTextColor(Color.RED);
+        }else {
+            icono_errores.setVisibility(View.INVISIBLE);
+            icono_ok.setVisibility(View.VISIBLE);
+            txv_mensajes.setTextColor(Color.GREEN);
+        }
+        txv_mensajes.setText(mensaje);
     }
 
     @Override
@@ -182,11 +209,9 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
                         producto.setCantidad(Integer.parseInt(data_user.getString("cantidad")));
 
                         productos_lista.add(producto);
+
+                        myAdapter.notifyDataSetChanged();
                     }
-
-                    myAdapter.notifyDataSetChanged();
-                    //datosUsuario.setTelefono(Integer.parseInt(data_user.getString("telefono")));
-
                 } catch (JSONException e) {
                     Toast.makeText(getApplicationContext(), "error: "+e.getMessage(), Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
@@ -231,12 +256,12 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
                     id_producto_creado = Integer.parseInt(response.getString("data"));
 
                     if (estado.length()>0) {
-                        Toast.makeText(getApplicationContext(), "Resultado " + estado, Toast.LENGTH_SHORT).show();
+                        mostrarMensajeInfo("Producto creado", false);
                         producto_anadido.setId_producto(id_producto_creado);
-
                         productos_lista.add(producto_anadido);
-
                         myAdapter.notifyDataSetChanged();
+                    }else {
+                        mostrarMensajeInfo("Error al crear el producto", true);
                     }
                 } catch (JSONException e) {
                     Toast.makeText(getApplicationContext(), "error: "+e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -273,10 +298,12 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
                     estado = response.getString("status");
 
                     if (estado.length()>0) {
-                        Toast.makeText(getApplicationContext(), "Resultado " + estado, Toast.LENGTH_SHORT).show();
                         productos_lista.clear();
 
                         myAdapter.notifyDataSetChanged();
+                        mostrarMensajeInfo("Se ha vaciado la lista ", false);
+                    }else {
+                        mostrarMensajeInfo("Error al vaciar la lista", true);
                     }
                 } catch (JSONException e) {
                     Toast.makeText(getApplicationContext(), "error: "+e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -358,7 +385,6 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
         alertDialogBuilder.setPositiveButton("AÑADIR PRODUCTO", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 try {
-                    Toast.makeText(getApplicationContext(), "->" + edt_nom_pro.getText().toString(), Toast.LENGTH_SHORT).show();
                     int cant_pro = 1;
                     double prec_pro = 0;
 
@@ -370,10 +396,11 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
                             prec_pro = Double.parseDouble(edt_pro_prec.getText().toString());
                         }
                         crearProducto(edt_nom_pro.getText().toString(), cant_pro, prec_pro);
+                    }else {
+                        mostrarMensajeInfo("Debes introducir un nombre de producto", true);
                     }
-
                 }catch (Exception e){
-                    Toast.makeText(getApplicationContext(), "ERROR al añadir el producto", Toast.LENGTH_SHORT).show();
+                    mostrarMensajeInfo("Error al añadir el producto", true);
                 }
             }
         });
@@ -470,10 +497,8 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
                         prec_pro = Double.parseDouble(edt_pro_prec.getText().toString());
                     }
                     editarProducto(id_producto, nom_pro, cant_pro, prec_pro);
-
-                    Toast.makeText(getApplicationContext(), id_producto+"\n"+nom_pro+"\n"+cant_pro+"\n"+prec_pro+"\n"+datosLista_id_lista, Toast.LENGTH_SHORT).show();
                 }catch (Exception e){
-                    Toast.makeText(getApplicationContext(), "ERROR al editar el producto", Toast.LENGTH_SHORT).show();
+                    mostrarMensajeInfo("Error al editar el producto", true);
                 }
             }
         });
@@ -518,7 +543,6 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
 
 
                     if (estado.length()>0) {
-                        Toast.makeText(getApplicationContext(), "Resultado " + estado, Toast.LENGTH_SHORT).show();
 
                         for (int i=0; i<productos_lista.size(); i++){
                             Producto recorriendo_productos = productos_lista.get(i);
@@ -529,13 +553,10 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
                                 productos_lista.get(i).setCantidad(cant_pro);
 
                                 myAdapter.notifyDataSetChanged();
+
+                                mostrarMensajeInfo("Producto editado", true);
                             }
                         }
-                        /*producto_editar.setId_producto(id_producto_creado);
-
-                        productos_lista.add(producto_anadido);
-
-                        myAdapter.notifyDataSetChanged();*/
                     }
                 } catch (JSONException e) {
                     Toast.makeText(getApplicationContext(), "error: "+e.getMessage(), Toast.LENGTH_SHORT).show();

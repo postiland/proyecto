@@ -6,10 +6,31 @@
     android:layout_height="match_parent"
     tools:context=".VistaProductosLista">
 
+    <ImageView
+        android:id="@+id/imv_icono_ok_productos"
+        android:layout_width="26dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="12dp"
+        android:src="@mipmap/ic_launcher_foreground"
+        android:visibility="visible"
+        app:layout_constraintEnd_toStartOf="@+id/txv_mensajes_productos"
+        app:layout_constraintTop_toBottomOf="@+id/ltv_productos"
+        app:srcCompat="@mipmap/ic_icono_ok" />
+
+    <TextView
+        android:id="@+id/txv_mensajes_productos"
+        android:layout_width="284dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ltv_productos" />
+
     <ListView
         android:id="@+id/ltv_productos"
         android:layout_width="368dp"
-        android:layout_height="410dp"
+        android:layout_height="391dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
@@ -33,10 +54,10 @@
         android:text="Añadir producto"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btn_limpiar_lista"
-        app:layout_constraintHorizontal_bias="0.16"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ltv_productos"
-        app:layout_constraintVertical_bias="0.517" />
+        app:layout_constraintVertical_bias="0.893" />
 
     <Button
         android:id="@+id/btn_limpiar_lista"
@@ -50,6 +71,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ltv_productos"
-        app:layout_constraintVertical_bias="0.517" />
+        app:layout_constraintVertical_bias="0.893" />
+
+    <ImageView
+        android:id="@+id/imv_icono_error_productos"
+        android:layout_width="26dp"
+        android:layout_height="31dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toStartOf="@+id/txv_mensajes_productos"
+        app:layout_constraintTop_toBottomOf="@+id/ltv_productos"
+        app:srcCompat="@mipmap/ic_icono_error" />
 
 </android.support.constraint.ConstraintLayout>
