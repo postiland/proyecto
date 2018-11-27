@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.view.ContextMenu;
 import android.view.Gravity;
@@ -34,6 +35,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
@@ -68,6 +70,8 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
     public static final String URL_EDITAR_PRODUCTO_COMPRADO = "http://antoniopostigo.es/Slim2-ok/api/editar/producto/comprado";
 
     public static final String URL_LIMPIAR_LISTA = "http://antoniopostigo.es/Slim2-ok/api/eliminar/productos/lista";
+
+    public static final String URL_LIMPIAR_PRODUCTOS = "http://antoniopostigo.es/Slim2-ok/api/limpiar/productos/comprados";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,6 +176,8 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
                 try {
                     estado = response.getString("status");
 
+                    int contadorComprados = 0;
+
                     for (int i=0; i<productos_lista.size(); i++){
                         Producto recorriendo_productos = productos_lista.get(i);
 
@@ -179,7 +185,18 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
                             productos_lista.get(i).setComprado(comprado);
 
                             myAdapter.notifyDataSetChanged();
+
                         }
+                    }
+
+                    for (int i=0; i<productos_lista.size(); i++){
+                        if (productos_lista.get(i).getComprado() == 1){
+                            contadorComprados++;
+                        }
+                    }
+
+                    if (contadorComprados == productos_lista.size()){
+                        mostrarAlertDialogLimpiarLista("¡Has completado la compra! ¿Quieres limpiar la lista?");
                     }
                 } catch (JSONException e) {
                     Toast.makeText(getApplicationContext(), "error: "+e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -222,23 +239,32 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
         }
 
         if (v==btn_limpiar_lista){
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("Vas a eliminar los productos de la lista ¿estas segur@?")
-                    .setTitle("COMPRA FINALIZADA")
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            limpiarLista();
-                        }
-                    })
-                    .setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                        }
-                    });
-            AlertDialog alert = builder.create();
-            alert.show();
-
+            mostrarAlertDialogLimpiarLista("Vas a eliminar los productos de la lista ¿estas segura/o?");
         }
+    }
+
+    private void mostrarAlertDialogLimpiarLista(String mensaje){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(mensaje)
+                .setTitle("COMPRA FINALIZADA")
+                .setPositiveButton("ELIMINAR TODOS LOS PRODUCTOS", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        limpiarLista();
+                    }
+                })
+                .setNegativeButton("LIMPIAR COLOR PRODUCTOS", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        limpiarColorLista();
+                    }
+                })
+                .setNeutralButton("CANCELAR", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                });
+
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     @Override
@@ -410,6 +436,50 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
         });
     }
 
+    private void limpiarColorLista() {
+        final ProgressDialog progreso = new ProgressDialog(getApplicationContext());
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams envio_limpiar_lista = new RequestParams();
+        envio_limpiar_lista.put("id_lista", datosLista_id_lista);
+
+        client.post(URL_LIMPIAR_PRODUCTOS, envio_limpiar_lista, new JsonHttpResponseHandler(){
+            @Override
+            public void onStart() {
+                super.onStart();
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                progreso.dismiss();
+                String estado = "";
+
+                try {
+                    estado = response.getString("status");
+
+                    if (estado.length()>0) {
+
+                        for (int i=0; i<productos_lista.size(); i++){
+                            productos_lista.get(i).setComprado(0);
+                        }
+
+                        myAdapter.notifyDataSetChanged();
+                    }else {
+                        mostrarMensajeInfo("Error al vaciar la lista", true);
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(getApplicationContext(), "error: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                progreso.dismiss();
+                Toast.makeText(getApplicationContext(), responseString, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void crearDialogAnadirProducto() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
@@ -430,16 +500,28 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
         final EditText edt_nom_pro = new EditText(this);
         TextView txv_nom_pro = new TextView(this);
         txv_nom_pro.setText("Nombre producto:");
+        int maxLengthNom = 20;
+        InputFilter[] fArray = new InputFilter[1];
+        fArray[0] = new InputFilter.LengthFilter(maxLengthNom);
+        edt_nom_pro.setFilters(fArray);
 
         final EditText edt_pro_cant = new EditText(this);
         edt_pro_cant.setInputType(InputType.TYPE_CLASS_NUMBER);
         edt_pro_cant.setText("1");
+        int maxLengthCant = 4;
+        InputFilter[] fArrayC = new InputFilter[1];
+        fArrayC[0] = new InputFilter.LengthFilter(maxLengthCant);
+        edt_pro_cant.setFilters(fArrayC);
         TextView txv_pro_cant = new TextView(this);
         txv_pro_cant.setText("Cantidad:");
 
         final EditText edt_pro_prec = new EditText(this);
         edt_pro_prec.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         edt_pro_prec.setText("0");
+        int maxLengthPre = 7;
+        InputFilter[] fArrayP = new InputFilter[1];
+        fArrayP[0] = new InputFilter.LengthFilter(maxLengthPre);
+        edt_pro_prec.setFilters(fArrayP);
         TextView txv_pro_prec = new TextView(this);
         txv_pro_prec.setText("Precio:");
 
@@ -479,12 +561,15 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
                     int cant_pro = 1;
                     double prec_pro = 0;
 
+                    DecimalFormat df2 = new DecimalFormat(".##");
+
                     if (!edt_nom_pro.getText().toString().isEmpty()){
                         if (!edt_pro_cant.getText().toString().isEmpty()){
                             cant_pro = Integer.parseInt(edt_pro_cant.getText().toString());
                         }
                         if (!edt_pro_prec.getText().toString().isEmpty()){
                             prec_pro = Double.parseDouble(edt_pro_prec.getText().toString());
+                            prec_pro = Double.parseDouble(df2.format(prec_pro));
                         }
                         crearProducto(edt_nom_pro.getText().toString(), cant_pro, prec_pro);
                     }else {
