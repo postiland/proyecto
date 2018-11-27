@@ -29,24 +29,21 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
     private Usuario datosUsuario;
 
     private ImageView icono_error_email;
-
     private TextView txv_error_email;
 
     private ImageView icono_error_contrasena;
-
     private TextView txv_error_contrasena;
 
     public static final String URL_COMPROBAR_USUARIO = "http://antoniopostigo.es/Slim2-ok/api/usuario/email";
 
     private String nuevo_usuario = "";
 
-    Button btn_login;
-    Button btn_registro;
+    private Button btn_login;
+    private Button btn_registro;
+    private Button btn_borrar_cuenta;
 
-    EditText email = null;
-    EditText contrasena = null;
-
-
+    private EditText email = null;
+    private EditText contrasena = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +54,8 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
         btn_login.setOnClickListener(this);
         btn_registro = (Button) findViewById(R.id.btn_registro_usuario);
         btn_registro.setOnClickListener(this);
+        btn_borrar_cuenta = (Button) findViewById(R.id.btn_borrar_cuenta_principal);
+        btn_borrar_cuenta.setOnClickListener(this);
 
         email = (EditText) findViewById(R.id.txv_email_usuario);
         contrasena = (EditText) findViewById(R.id.txv_contrasena_usuario);
@@ -81,12 +80,12 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        if (v==btn_login){
+        if (v==btn_login || v == btn_borrar_cuenta){
             icono_error_email.setVisibility(View.INVISIBLE);
             txv_error_email.setText("");
             icono_error_contrasena.setVisibility(View.INVISIBLE);
             txv_error_contrasena.setText("");
-            comprobarLogin();
+            comprobarLogin(v);
         }
 
         if (v==btn_registro){
@@ -95,7 +94,7 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    private void comprobarLogin() {
+    private void comprobarLogin(View v) {
         String txv_email = email.getText().toString();
         String txv_contrasena = contrasena.getText().toString();
         Pattern modeloEmail = Pattern
@@ -116,16 +115,29 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
             txv_error_contrasena.setText("Debes introducir una contraseña");
             txv_error_contrasena.setTextColor(Color.RED);
         }else {
-            cogerUsuario(txv_email, txv_contrasena);
+            cogerUsuario(txv_email, txv_contrasena, v);
         }
     }
 
-    private void comprobacionesInicioSesion(String txv_contrasena){
+    private void comprobacionesInicioSesion(String txv_contrasena, View v){
         if (!datosUsuario.getContrasena().isEmpty()){
             if (datosUsuario.getContrasena().equals(txv_contrasena)){
-                Intent intent = new Intent(getBaseContext(), VistaListas.class);
-                intent.putExtra("ID_USUARIO", String.valueOf(datosUsuario.getId_usuario()));
-                startActivity(intent);
+                if (v == btn_login) {
+                    if (datosUsuario.getCuenta_activa() == 0){
+                        icono_error_email.setVisibility(View.VISIBLE);
+                        txv_error_email.setText("Debes validar el email antes de iniciar sesión");
+                        txv_error_email.setTextColor(Color.RED);
+                    }else {
+                        Intent intent = new Intent(getBaseContext(), VistaListas.class);
+                        intent.putExtra("ID_USUARIO", String.valueOf(datosUsuario.getId_usuario()));
+                        startActivity(intent);
+                    }
+                }else {
+                    Intent intent = new Intent(getBaseContext(), VistaBorrarCuenta.class);
+                    intent.putExtra("ID_USUARIO", String.valueOf(datosUsuario.getId_usuario()));
+                    intent.putExtra("NOMBRE_USUARIO", datosUsuario.getNombre());
+                    startActivity(intent);
+                }
             }else {
                 icono_error_contrasena.setVisibility(View.VISIBLE);
                 txv_error_contrasena.setText("Contraseña incorrecta");
@@ -134,7 +146,7 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    private void cogerUsuario(String txv_email, final String txv_contrasena) {
+    private void cogerUsuario(String txv_email, final String txv_contrasena, final View v) {
         final ProgressDialog progreso = new ProgressDialog(this);
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams envio_email = new RequestParams();
@@ -163,17 +175,13 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
                     if (datos_usuario.length()>0) {
                         data_user = datos_usuario.getJSONObject(0);
 
+                        datosUsuario.setNombre(data_user.getString("nombre"));
                         datosUsuario.setContrasena(data_user.getString("contrasena"));
                         datosUsuario.setId_usuario(Integer.parseInt(data_user.getString("id_usuario")));
                         datosUsuario.setCuenta_activa(Integer.parseInt(data_user.getString("cuenta_activa")));
 
-                        if (datosUsuario.getCuenta_activa() == 0){
-                            icono_error_email.setVisibility(View.VISIBLE);
-                            txv_error_email.setText("Debes validar el email antes de iniciar sesión");
-                            txv_error_email.setTextColor(Color.RED);
-                        }else {
-                            comprobacionesInicioSesion(txv_contrasena);
-                        }
+                        comprobacionesInicioSesion(txv_contrasena, v);
+
                     }else {
                         icono_error_email.setVisibility(View.VISIBLE);
                         txv_error_email.setText("El email introducido no existe");
