@@ -10,6 +10,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Gravity;
@@ -465,6 +466,10 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
         final EditText et = new EditText(this);
         TextView tv1 = new TextView(this);
         tv1.setText("Nombre lista:");
+        int maxLengthNom = 20;
+        InputFilter[] fArray = new InputFilter[1];
+        fArray[0] = new InputFilter.LengthFilter(maxLengthNom);
+        et.setFilters(fArray);
 
         LinearLayout.LayoutParams tv1Params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         tv1Params.bottomMargin = 5;
@@ -490,7 +495,12 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
         alertDialogBuilder.setPositiveButton("CREAR LISTA", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 try {
-                    crearLista(et.getText().toString());
+                    String nombre_lista = et.getText().toString();
+                    if (!nombre_lista.isEmpty()) {
+                        crearLista(et.getText().toString());
+                    }else {
+                        mostrarMensajeInfo("Debes introducir un nombre", true);
+                    }
                 }catch (Exception e){
                     mostrarMensajeInfo("ERROR! Imposible crear lista", true);
                 }
@@ -527,6 +537,10 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
         et.setText(nombre_lista_pulsada);
         TextView tv1 = new TextView(this);
         tv1.setText("Nombre lista:");
+        int maxLengthNom = 20;
+        InputFilter[] fArray = new InputFilter[1];
+        fArray[0] = new InputFilter.LengthFilter(maxLengthNom);
+        et.setFilters(fArray);
 
         LinearLayout.LayoutParams tv1Params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         tv1Params.bottomMargin = 5;
@@ -552,7 +566,12 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
         alertDialogBuilder.setPositiveButton("EDITAR LISTA", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 try {
-                    editarLista(et.getText().toString());
+                    String nombre_lista = et.getText().toString();
+                    if (!nombre_lista.isEmpty()) {
+                        editarLista(nombre_lista);
+                    }else {
+                        mostrarMensajeInfo("Debes introducir un nombre", true);
+                    }
                 }catch (Exception e){
                     mostrarMensajeInfo("ERROR! Imposible editar lista", true);
                 }
@@ -588,6 +607,10 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
         final EditText et = new EditText(this);
         TextView tv1 = new TextView(this);
         tv1.setText("Email de usuario:");
+        int maxLengthNom = 60;
+        InputFilter[] fArray = new InputFilter[1];
+        fArray[0] = new InputFilter.LengthFilter(maxLengthNom);
+        et.setFilters(fArray);
 
         LinearLayout.LayoutParams tv1Params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         tv1Params.bottomMargin = 5;

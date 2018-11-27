@@ -611,10 +611,18 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
         edt_nom_pro.setText(nombre_producto);
         TextView txv_nom_pro = new TextView(this);
         txv_nom_pro.setText("Nombre producto:");
+        int maxLengthNom = 20;
+        InputFilter[] fArray = new InputFilter[1];
+        fArray[0] = new InputFilter.LengthFilter(maxLengthNom);
+        edt_nom_pro.setFilters(fArray);
 
         final EditText edt_pro_cant = new EditText(this);
         edt_pro_cant.setInputType(InputType.TYPE_CLASS_NUMBER);
         edt_pro_cant.setText("1");
+        int maxLengthCant = 4;
+        InputFilter[] fArrayC = new InputFilter[1];
+        fArrayC[0] = new InputFilter.LengthFilter(maxLengthCant);
+        edt_pro_cant.setFilters(fArrayC);
         edt_pro_cant.setText(String.valueOf(cantidad_producto));
         TextView txv_pro_cant = new TextView(this);
         txv_pro_cant.setText("Cantidad:");
@@ -623,6 +631,10 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
         edt_pro_prec.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         edt_pro_prec.setText("0");
         edt_pro_prec.setText(String.valueOf(precio_producto));
+        int maxLengthPre = 7;
+        InputFilter[] fArrayP = new InputFilter[1];
+        fArrayP[0] = new InputFilter.LengthFilter(maxLengthPre);
+        edt_pro_prec.setFilters(fArrayP);
         TextView txv_pro_prec = new TextView(this);
         txv_pro_prec.setText("Precio:");
 
