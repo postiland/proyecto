@@ -78,8 +78,9 @@ public class VistaRegistroUsuario extends AppCompatActivity implements View.OnCl
             txv_errores.setTextColor(Color.RED);
             if (comprobarCampos()){
                 insertarUsuario();
-                Intent intent = new Intent(getBaseContext(), PaginaPrincipal.class);
+                Intent intent = new Intent(getBaseContext(), VistaActivarEmail.class);
                 intent.putExtra("EMAIL_NUEVO_USUARIO", crearUsuario.getEmail());
+                intent.putExtra("NOMBRE_NUEVO_USUARIO", crearUsuario.getNombre());
                 startActivity(intent);
             }
         }
@@ -245,7 +246,7 @@ public class VistaRegistroUsuario extends AppCompatActivity implements View.OnCl
                     estado = response.getString("status");
 
                     if (estado.length()>0) {
-                        Toast.makeText(getApplicationContext(), estado, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), estado, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     Toast.makeText(getApplicationContext(), "error: "+e.getMessage(), Toast.LENGTH_SHORT).show();

@@ -21,7 +21,8 @@
         <activity android:name=".VistaListas" />
         <activity android:name=".VistaProductosLista" />
         <activity android:name=".VistaRegistroUsuario" />
-        <activity android:name=".VistaBorrarCuenta"></activity>
+        <activity android:name=".VistaBorrarCuenta" />
+        <activity android:name=".VistaActivarEmail"></activity>
     </application>
 
 </manifest>

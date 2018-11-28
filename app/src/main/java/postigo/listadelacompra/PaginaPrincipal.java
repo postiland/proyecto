@@ -74,6 +74,7 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
         if (nuevo_usuario != null){
             if (nuevo_usuario.length() > 0) {
                 email.setText(nuevo_usuario);
+                contrasena.setText("");
             }
         }
     }
