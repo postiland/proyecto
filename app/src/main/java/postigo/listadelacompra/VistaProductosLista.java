@@ -792,6 +792,7 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
                                 productos_lista.get(i).setNombre_producto(nombre_producto);
                                 productos_lista.get(i).setPrecio(prec_pro);
                                 productos_lista.get(i).setCantidad(cant_pro);
+                                productos_lista.get(i).setComprado(0);
 
                                 myAdapter.notifyDataSetChanged();
 
