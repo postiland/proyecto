@@ -71,6 +71,8 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
 
     public static final String URL_LIMPIAR_LISTA = "http://antoniopostigo.es/Slim2-ok/api/eliminar/productos/lista";
 
+    public static final String URL_ELIMINAR_PRODUCTO = "http://antoniopostigo.es/Slim2-ok/api/eliminar/producto/lista";
+
     public static final String URL_LIMPIAR_PRODUCTOS = "http://antoniopostigo.es/Slim2-ok/api/limpiar/productos/comprados";
 
     @Override
@@ -281,10 +283,61 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
 
         if(item.getItemId()==R.id.editar_producto){
             crearDialogEditarProducto(producto_pulsado.getId_producto(), producto_pulsado.getNombre_producto(), producto_pulsado.getPrecio(), producto_pulsado.getCantidad());
+        }else if(item.getItemId()==R.id.eliminar_producto){
+            eliminarProductoLista(producto_pulsado.getId_producto());
         }else{
             return false;
         }
         return true;
+    }
+
+    private void eliminarProductoLista(final int id_producto) {
+        final ProgressDialog progreso = new ProgressDialog(getApplicationContext());
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams envio_eliminar_producto_lista = new RequestParams();
+        envio_eliminar_producto_lista.put("id_lista", datosLista_id_lista);
+        envio_eliminar_producto_lista.put("id_producto", id_producto);
+
+        client.post(URL_ELIMINAR_PRODUCTO, envio_eliminar_producto_lista, new JsonHttpResponseHandler(){
+            @Override
+            public void onStart() {
+                super.onStart();
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                progreso.dismiss();
+                String estado = "";
+
+                try {
+                    estado = response.getString("status");
+                    Producto productoBorrar;
+
+                    if (estado.length()>0) {
+                        mostrarMensajeInfo("Se ha eliminado el producto ", false);
+                        for(int i=0;i<productos_lista.size();i++) {
+                            productoBorrar = productos_lista.get(i);
+                            if (productoBorrar.getId_producto() == id_producto){
+                                productos_lista.remove(i);
+
+                                myAdapter.notifyDataSetChanged();
+                            }
+                        }
+                    }else {
+                        mostrarMensajeInfo("Error al eliminar el producto", true);
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(getApplicationContext(), "error: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                progreso.dismiss();
+                Toast.makeText(getApplicationContext(), responseString, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void cogerProductos(String id_producto) {

@@ -372,9 +372,11 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
 
                 try {
                     estado = response.getString("status");
-                    id_lista_creada = Integer.parseInt(response.getString("data"));
+
 
                     if (estado.length()>0) {
+                        id_lista_creada = Integer.parseInt(response.getString("data"));
+
                         mostrarMensajeInfo("Lista creada", false);
                         listaAnadir.setId_lista(id_lista_creada);
                         listaAnadir.setNombre(nombre_lista);
