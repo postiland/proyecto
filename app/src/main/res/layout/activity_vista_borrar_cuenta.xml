@@ -8,7 +8,7 @@
 
     <Button
         android:id="@+id/btn_borrar_cuenta"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
@@ -19,9 +19,10 @@
         android:text="Borrar cuenta"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txv_aviso_imposible_borrar"
-        app:layout_constraintVertical_bias="0.243" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/txv_aviso_borrar_cuenta"

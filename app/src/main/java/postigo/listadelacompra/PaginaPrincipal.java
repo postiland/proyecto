@@ -131,6 +131,7 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
                     }else {
                         Intent intent = new Intent(getBaseContext(), VistaListas.class);
                         intent.putExtra("ID_USUARIO", String.valueOf(datosUsuario.getId_usuario()));
+                        intent.putExtra("NOMBRE_USUARIO", datosUsuario.getNombre());
                         startActivity(intent);
                     }
                 }else {

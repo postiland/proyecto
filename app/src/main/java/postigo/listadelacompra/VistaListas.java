@@ -46,6 +46,7 @@ import cz.msebera.android.httpclient.Header;
 public class VistaListas extends AppCompatActivity implements View.OnClickListener{
 
     private String datosUsuario_id_usuario;
+    private String datosUsuario_nombre_usuario;
 
     ListView lista_listas;
 
@@ -54,6 +55,8 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
     TextView txv_nom_lis;
 
     private int id_lista_borrar = 0;
+
+    private String nombre_lista_manipular = "";
 
     private int id_posicion_lista = 0;
 
@@ -72,6 +75,10 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
 
     public static final String URL_COGER_LISTAS = "http://antoniopostigo.es/Slim2-ok/api/id_usuario/obtener/id_listas";
 
+    public static final String URL_COGER_USUARIOS_AVISAR = "http://antoniopostigo.es/Slim2-ok/api/obtener/usuarios/lista";
+
+    public static final String URL_ENVIAR_EMAIL_AVISO = "http://antoniopostigo.es/Slim2-ok/api/alerta/usuarios/compra";
+
     public static final String URL_CREAR_LISTA = "http://antoniopostigo.es/Slim2-ok/api/crear/lista";
 
     public static final String URL_BORRAR_LISTA = "http://antoniopostigo.es/Slim2-ok/api/eliminar/lista";
@@ -86,6 +93,7 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
         setContentView(R.layout.activity_vista_listas);
 
         datosUsuario_id_usuario= getIntent().getStringExtra("ID_USUARIO");
+        datosUsuario_nombre_usuario= getIntent().getStringExtra("NOMBRE_USUARIO");
 
         lista_listas=(ListView) findViewById(R.id.ltv_listas);
 
@@ -124,6 +132,7 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
 
                 if (String.valueOf(lista.getId_usuario()).equals(datosUsuario_id_usuario)){
                     id_lista_borrar = lista.getId_lista();
+                    nombre_lista_manipular = lista.getNombre();
                     openContextMenu(lista_listas);
                 }else {
                     mostrarMensajeInfo("Solo el propietario puede editar o eliminar una lista", true);
@@ -166,6 +175,10 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
 
         if(item.getItemId()==R.id.editar_lista){
             crearDialogEditarLista(lista_pulsada.getNombre());
+        }
+        else if(item.getItemId()==R.id.avisar_usuarios){
+            cogerUsuariosAvisar();
+
         }
         else if(item.getItemId()==R.id.eliminar_lista){
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -340,6 +353,99 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
                     Toast.makeText(getApplicationContext(), "error: "+e.getMessage(), Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                progreso.dismiss();
+                Toast.makeText(getApplicationContext(), responseString, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void cogerUsuariosAvisar() {
+        final ProgressDialog progreso = new ProgressDialog(this);
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams envio_email_aviso = new RequestParams();
+        envio_email_aviso.put("id_lista", id_lista_borrar);
+
+        client.post(URL_COGER_USUARIOS_AVISAR, envio_email_aviso, new JsonHttpResponseHandler(){
+            @Override
+            public void onStart() {
+                super.onStart();
+                progreso.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progreso.setMessage("Conectando . . .");
+                progreso.setCancelable(false);
+                progreso.show();
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                progreso.dismiss();
+                JSONArray datos_usuario;
+                JSONObject data_user;
+
+
+                try {
+                    datos_usuario= response.getJSONArray("data");
+
+                    Usuario[] usuarios_avisar = new Usuario[datos_usuario.length()];
+
+                    for (int i=0; i<datos_usuario.length(); i++){
+                        Usuario usuario_avisar = new Usuario();
+
+                        data_user = datos_usuario.getJSONObject(i);
+                        usuario_avisar.setId_usuario(Integer.parseInt(data_user.getString("id_usuario")));
+                        usuario_avisar.setNombre(data_user.getString("nombre"));
+                        usuario_avisar.setEmail(data_user.getString("email"));
+
+                        usuarios_avisar[i] = usuario_avisar;
+
+                        enviarEmailAvisoCompra(usuario_avisar);
+                    }
+
+
+                } catch (JSONException e) {
+                    Toast.makeText(getApplicationContext(), "error: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                progreso.dismiss();
+                Toast.makeText(getApplicationContext(), responseString, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void enviarEmailAvisoCompra(Usuario usuario_avisar) {
+        //Toast.makeText(getApplicationContext(), "Holi: "+usuario_avisar.toString()+"\n--"+nombre_lista_manipular, Toast.LENGTH_SHORT).show();
+
+        final ProgressDialog progreso = new ProgressDialog(this);
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams envio_email_aviso = new RequestParams();
+        envio_email_aviso.put("nombre_usuario_invitado", usuario_avisar.getNombre());
+        envio_email_aviso.put("email_usuario_invitado", usuario_avisar.getEmail());
+        envio_email_aviso.put("nombre_usuario_compra", datosUsuario_nombre_usuario);
+        envio_email_aviso.put("nombre_lista", nombre_lista_manipular);
+
+        client.post(URL_ENVIAR_EMAIL_AVISO, envio_email_aviso, new JsonHttpResponseHandler(){
+            @Override
+            public void onStart() {
+                super.onStart();
+                progreso.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progreso.setMessage("Conectando . . .");
+                progreso.setCancelable(false);
+                progreso.show();
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                progreso.dismiss();
+                JSONArray datos_usuario;
+                JSONObject data_user;
+
             }
 
             @Override
