@@ -443,9 +443,21 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 progreso.dismiss();
-                JSONArray datos_usuario;
-                JSONObject data_user;
+                String estado="";
 
+                try {
+                    estado = response.getString("status");
+
+                    if (estado.length()>0) {
+                        mostrarMensajeInfo("Emails enviados a los usuarios", false);
+                    }else {
+                        mostrarMensajeInfo("Fallo al mandar emails", true);
+                    }
+
+                } catch (JSONException e) {
+                    Toast.makeText(getApplicationContext(), "error: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
             }
 
             @Override

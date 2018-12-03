@@ -67,6 +67,7 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
         btn_cambiar_contrasena.setOnClickListener(this);
 
         email = (EditText) findViewById(R.id.txv_email_usuario);
+        email.requestFocus();
         contrasena = (EditText) findViewById(R.id.txv_contrasena_usuario);
 
         icono_error_email = (ImageView) findViewById(R.id.imv_icono_error_email);
@@ -84,6 +85,7 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
             if (nuevo_usuario.length() > 0) {
                 email.setText(nuevo_usuario);
                 contrasena.setText("");
+                contrasena.requestFocus();
             }
         }
     }
@@ -110,10 +112,12 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
             if (txv_email.isEmpty()){
                 icono_error_email.setVisibility(View.VISIBLE);
                 txv_error_email.setText("Debes introducir un email");
+                email.requestFocus();
                 txv_error_email.setTextColor(Color.RED);
             }else if (!mather.find()) {
                 icono_error_email.setVisibility(View.VISIBLE);
                 txv_error_email.setText("Debes introducir un email válido");
+                email.requestFocus();
                 txv_error_email.setTextColor(Color.RED);
             }else {
                 mandarEmailCambiarContrasena(txv_email);
@@ -140,7 +144,7 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 progreso.dismiss();
-                JSONArray datos_usuario;
+
                 String estado="";
 
                 try {
@@ -175,14 +179,17 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
         if (txv_email.isEmpty()){
             icono_error_email.setVisibility(View.VISIBLE);
             txv_error_email.setText("Debes introducir un email");
+            email.requestFocus();
             txv_error_email.setTextColor(Color.RED);
         }else if (!mather.find()) {
             icono_error_email.setVisibility(View.VISIBLE);
             txv_error_email.setText("Debes introducir un email válido");
+            email.requestFocus();
             txv_error_email.setTextColor(Color.RED);
         }else if (txv_contrasena.isEmpty()) {
             icono_error_contrasena.setVisibility(View.VISIBLE);
             txv_error_contrasena.setText("Debes introducir una contraseña");
+            contrasena.requestFocus();
             txv_error_contrasena.setTextColor(Color.RED);
         }else {
             cogerUsuario(txv_email, txv_contrasena, v);
@@ -212,6 +219,7 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
             }else {
                 icono_error_contrasena.setVisibility(View.VISIBLE);
                 txv_error_contrasena.setText("Contraseña incorrecta");
+                contrasena.requestFocus();
                 txv_error_contrasena.setTextColor(Color.RED);
             }
         }
@@ -256,6 +264,7 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
                     }else {
                         icono_error_email.setVisibility(View.VISIBLE);
                         txv_error_email.setText("El email introducido no existe");
+                        email.requestFocus();
                         txv_error_email.setTextColor(Color.RED);
                     }
 

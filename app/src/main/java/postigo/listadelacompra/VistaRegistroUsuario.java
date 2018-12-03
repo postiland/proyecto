@@ -55,6 +55,7 @@ public class VistaRegistroUsuario extends AppCompatActivity implements View.OnCl
         setContentView(R.layout.activity_vista_registro_usuario);
 
         nombre = (EditText) findViewById(R.id.txv_nombre);
+        nombre.requestFocus();
         apellidos = (EditText) findViewById(R.id.txv_apellidos);
         email = (EditText) findViewById(R.id.txv_email);
         telefono = (EditText) findViewById(R.id.txv_telefono);
@@ -103,16 +104,19 @@ public class VistaRegistroUsuario extends AppCompatActivity implements View.OnCl
 
         if (txv_email.isEmpty()){
             mostrarError("Debes introducir un email");
+            email.requestFocus();
             return false;
         }else{
             Matcher mather = modeloEmail.matcher(txv_email);
             if (!mather.find()){
                 mostrarError("Debes introducir un email válido");
+                email.requestFocus();
                 return false;
             }else {
                 for (int i=0; i<emailsObtenidos.size(); i++){
                     if (txv_email.equals(emailsObtenidos.get(i))){
                         mostrarError("El email elegido ya existe");
+                        email.requestFocus();
                         return false;
                     }
                 }
@@ -121,36 +125,43 @@ public class VistaRegistroUsuario extends AppCompatActivity implements View.OnCl
 
         if (txv_nombre.isEmpty()){
             mostrarError("Debes introducir un nombre");
+            nombre.requestFocus();
             return false;
         }
 
         if (txv_apellidos.isEmpty()){
             mostrarError("Debes introducir los apellidos");
+            apellidos.requestFocus();
             return false;
         }
 
         if (txv_telefono.isEmpty()){
             mostrarError("Debes introducir un telefono");
+            telefono.requestFocus();
             return false;
         }else if (txv_telefono.length() < 9){
             mostrarError("Debes introducir un telefono válido");
+            telefono.requestFocus();
             return false;
         }else {
             try {
                 numeroTelefono = Integer.parseInt(txv_telefono);
             }catch (Exception e){
                 mostrarError("Debes introducir un telefono válido");
+                telefono.requestFocus();
                 return false;
             }
         }
 
         if (txv_contrasena.isEmpty()){
             mostrarError("Debes introducir una contraseña");
+            contrasena.requestFocus();
             return false;
         }else{
             Matcher mather = modeloContrasena.matcher(txv_contrasena);
             if (!mather.find()){
                 mostrarError("Debes introducir una contraseña válida");
+                contrasena.requestFocus();
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage("La contraseña debe tener:\n\n- Entre 8 y 16 caracteres.\n- Al menos 1 número.\n- Mayúsculas y minúsculas.")
                         .setCancelable(false)

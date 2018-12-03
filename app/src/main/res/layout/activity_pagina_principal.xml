@@ -18,7 +18,7 @@
         android:ems="10"
         android:inputType="textPassword"
         android:maxLength="29"
-        android:text="Holi1234"
+        android:text="socio123"
         app:layout_constraintBottom_toTopOf="@+id/btn_acceder"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.477"
