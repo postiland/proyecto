@@ -36,14 +36,21 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
 
     public static final String URL_COMPROBAR_USUARIO = "http://antoniopostigo.es/Slim2-ok/api/usuario/email";
 
+    public static final String URL_CAMBIAR_CONTRASENA = "http://antoniopostigo.es/Slim2-ok/api/cambiar/contrasena/usuario";
+
     private String nuevo_usuario = "";
 
     private Button btn_login;
     private Button btn_registro;
     private Button btn_borrar_cuenta;
+    private Button btn_cambiar_contrasena;
 
     private EditText email = null;
     private EditText contrasena = null;
+
+    private Pattern modeloEmail = Pattern
+            .compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+                    + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +63,8 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
         btn_registro.setOnClickListener(this);
         btn_borrar_cuenta = (Button) findViewById(R.id.btn_borrar_cuenta_principal);
         btn_borrar_cuenta.setOnClickListener(this);
+        btn_cambiar_contrasena = (Button) findViewById(R.id.btn_cambiar_contrasena);
+        btn_cambiar_contrasena.setOnClickListener(this);
 
         email = (EditText) findViewById(R.id.txv_email_usuario);
         contrasena = (EditText) findViewById(R.id.txv_contrasena_usuario);
@@ -93,14 +102,74 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
             Intent intent = new Intent(getBaseContext(), VistaRegistroUsuario.class);
             startActivity(intent);
         }
+
+        if (v==btn_cambiar_contrasena){
+            String txv_email = email.getText().toString();
+            Matcher mather = modeloEmail.matcher(txv_email);
+
+            if (txv_email.isEmpty()){
+                icono_error_email.setVisibility(View.VISIBLE);
+                txv_error_email.setText("Debes introducir un email");
+                txv_error_email.setTextColor(Color.RED);
+            }else if (!mather.find()) {
+                icono_error_email.setVisibility(View.VISIBLE);
+                txv_error_email.setText("Debes introducir un email válido");
+                txv_error_email.setTextColor(Color.RED);
+            }else {
+                mandarEmailCambiarContrasena(txv_email);
+            }
+        }
+    }
+
+    private void mandarEmailCambiarContrasena(String txv_email) {
+        final ProgressDialog progreso = new ProgressDialog(this);
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams envio_email = new RequestParams();
+        envio_email.put("email", txv_email);
+
+        client.post(URL_CAMBIAR_CONTRASENA, envio_email, new JsonHttpResponseHandler(){
+            @Override
+            public void onStart() {
+                super.onStart();
+                progreso.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progreso.setMessage("Conectando . . .");
+                progreso.setCancelable(false);
+                progreso.show();
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                progreso.dismiss();
+                JSONArray datos_usuario;
+                String estado="";
+
+                try {
+                    estado = response.getString("status");
+
+                    if (estado.length()>0) {
+                        //Toast.makeText(getApplicationContext(), "Email enviado: "+estado, Toast.LENGTH_SHORT).show();
+                    }else {
+
+                    }
+
+                } catch (JSONException e) {
+                    Toast.makeText(getApplicationContext(), "error: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                progreso.dismiss();
+                Toast.makeText(getApplicationContext(), responseString, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void comprobarLogin(View v) {
         String txv_email = email.getText().toString();
         String txv_contrasena = contrasena.getText().toString();
-        Pattern modeloEmail = Pattern
-                .compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
-                        + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
+
         Matcher mather = modeloEmail.matcher(txv_email);
 
         if (txv_email.isEmpty()){
@@ -109,7 +178,7 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
             txv_error_email.setTextColor(Color.RED);
         }else if (!mather.find()) {
             icono_error_email.setVisibility(View.VISIBLE);
-            txv_error_email.setText("Debes introducir un email valido");
+            txv_error_email.setText("Debes introducir un email válido");
             txv_error_email.setTextColor(Color.RED);
         }else if (txv_contrasena.isEmpty()) {
             icono_error_contrasena.setVisibility(View.VISIBLE);

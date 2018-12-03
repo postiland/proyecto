@@ -614,7 +614,7 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
                     int cant_pro = 1;
                     double prec_pro = 0;
 
-                    DecimalFormat df2 = new DecimalFormat(".##");
+                    //DecimalFormat df2 = new DecimalFormat("####.##");
 
                     if (!edt_nom_pro.getText().toString().isEmpty()){
                         if (!edt_pro_cant.getText().toString().isEmpty()){
@@ -622,14 +622,14 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
                         }
                         if (!edt_pro_prec.getText().toString().isEmpty()){
                             prec_pro = Double.parseDouble(edt_pro_prec.getText().toString());
-                            prec_pro = Double.parseDouble(df2.format(prec_pro));
+                            //prec_pro = Double.parseDouble(df2.format(prec_pro));
                         }
                         crearProducto(edt_nom_pro.getText().toString(), cant_pro, prec_pro);
                     }else {
                         mostrarMensajeInfo("Debes introducir un nombre de producto", true);
                     }
                 }catch (Exception e){
-                    mostrarMensajeInfo("Error al añadir el producto", true);
+                    mostrarMensajeInfo("Error al añadir el producto "+e.getMessage(), true);
                 }
             }
         });
