@@ -4,40 +4,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/color1"
     tools:context=".VistaProductosLista">
 
     <ImageView
         android:id="@+id/imv_icono_ok_productos"
-        android:layout_width="26dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="12dp"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
         android:src="@mipmap/ic_launcher_foreground"
         android:visibility="visible"
-        app:layout_constraintEnd_toStartOf="@+id/txv_mensajes_productos"
+        app:layout_constraintStart_toStartOf="@+id/ltv_productos"
         app:layout_constraintTop_toBottomOf="@+id/ltv_productos"
         app:srcCompat="@mipmap/ic_icono_ok" />
 
     <TextView
         android:id="@+id/txv_mensajes_productos"
-        android:layout_width="284dp"
+        android:layout_width="334dp"
         android:layout_height="35dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginRight="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintStart_toEndOf="@+id/imv_icono_error_productos"
         app:layout_constraintTop_toBottomOf="@+id/ltv_productos" />
 
     <ListView
         android:id="@+id/ltv_productos"
-        android:layout_width="368dp"
-        android:layout_height="391dp"
+        android:layout_width="375dp"
+        android:layout_height="402dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.428"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -45,40 +44,33 @@
         android:id="@+id/btn_anadir_producto"
         android:layout_width="177dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
+        android:drawableLeft="@drawable/ic_icono_anadir_carrito"
         android:text="Añadir producto"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btn_limpiar_lista"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ltv_productos"
-        app:layout_constraintVertical_bias="0.893" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/btn_limpiar_lista"
-        android:layout_width="174dp"
+        android:layout_width="191dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
+        android:drawableLeft="@drawable/ic_icono_compra_finalizada"
         android:text="Compra finalizada"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ltv_productos"
-        app:layout_constraintVertical_bias="0.893" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <ImageView
         android:id="@+id/imv_icono_error_productos"
-        android:layout_width="26dp"
-        android:layout_height="31dp"
-        android:layout_marginTop="12dp"
-        app:layout_constraintEnd_toStartOf="@+id/txv_mensajes_productos"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        app:layout_constraintStart_toStartOf="@+id/ltv_productos"
         app:layout_constraintTop_toBottomOf="@+id/ltv_productos"
         app:srcCompat="@mipmap/ic_icono_error" />
 
