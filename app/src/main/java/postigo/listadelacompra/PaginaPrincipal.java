@@ -19,6 +19,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -192,7 +195,24 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
             contrasena.requestFocus();
             txv_error_contrasena.setTextColor(Color.RED);
         }else {
-            cogerUsuario(txv_email, txv_contrasena, v);
+            cogerUsuario(txv_email, getMD5(txv_contrasena), v);
+        }
+    }
+
+    private String getMD5(String input) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] messageDigest = md.digest(input.getBytes());
+            BigInteger number = new BigInteger(1, messageDigest);
+            String hashtext = number.toString(16);
+
+            while (hashtext.length() < 32) {
+                hashtext = "0" + hashtext;
+            }
+            return hashtext;
+        }
+        catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
         }
     }
 

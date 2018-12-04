@@ -22,6 +22,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -175,9 +178,27 @@ public class VistaRegistroUsuario extends AppCompatActivity implements View.OnCl
             }
         }
 
-        crearUsuario = new Usuario(txv_nombre, txv_apellidos, txv_email, numeroTelefono, txv_contrasena);
+        String pass = getMD5(txv_contrasena);
 
+        crearUsuario = new Usuario(txv_nombre, txv_apellidos, txv_email, numeroTelefono, pass);
+        Toast.makeText(getApplicationContext(), "error: "+crearUsuario.toString(), Toast.LENGTH_SHORT).show();
         return true;
+    }
+
+    private String getMD5(String contrasena) {
+        try {
+            java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
+            byte[] array = md.digest(contrasena.getBytes());
+            StringBuilder sb = new StringBuilder();
+
+            for (int i = 0; i < array.length; ++i) {
+                sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1,3));
+            }
+            return sb.toString();
+        } catch (java.security.NoSuchAlgorithmException e) {
+            System.err.println("Error "+e.getMessage());
+        }
+        return "";
     }
 
     private void mostrarError(String error){
@@ -257,7 +278,7 @@ public class VistaRegistroUsuario extends AppCompatActivity implements View.OnCl
                     estado = response.getString("status");
 
                     if (estado.length()>0) {
-                        //Toast.makeText(getApplicationContext(), estado, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), estado, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     Toast.makeText(getApplicationContext(), "error: "+e.getMessage(), Toast.LENGTH_SHORT).show();

@@ -63,6 +63,8 @@
         android:id="@+id/btn_registro_usuario"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:drawableLeft="@drawable/ic_icono_anadir_usuario"
         android:drawablePadding="6dp"
         android:paddingLeft="10dp"
@@ -137,7 +139,8 @@
         android:layout_height="wrap_content"
         android:drawableLeft="@drawable/ic_icono_cambiar_contrasena"
         android:text="Cambiar contraseña"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="110dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
