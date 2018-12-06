@@ -57,6 +57,8 @@ public class VistaRegistroUsuario extends AppCompatActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vista_registro_usuario);
 
+        getSupportActionBar().hide();
+
         nombre = (EditText) findViewById(R.id.txv_nombre);
         nombre.requestFocus();
         apellidos = (EditText) findViewById(R.id.txv_apellidos);
@@ -67,7 +69,7 @@ public class VistaRegistroUsuario extends AppCompatActivity implements View.OnCl
         btn_registrate=(Button) findViewById(R.id.btn_registrate);
         btn_registrate.setOnClickListener(this);
 
-        icono_errores = (ImageView) findViewById(R.id.imv_icono_errores_registro);
+        //icono_errores = (ImageView) findViewById(R.id.imv_icono_errores_registro);
         icono_errores.setVisibility(View.INVISIBLE);
         txv_errores = (TextView) findViewById(R.id.txv_errores_registro);
 

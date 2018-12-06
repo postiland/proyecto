@@ -4,18 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color1"
     tools:context=".VistaProductosLista">
-
-    <ImageView
-        android:id="@+id/imv_icono_ok_productos"
-        android:layout_width="22dp"
-        android:layout_height="22dp"
-        android:src="@mipmap/ic_launcher_foreground"
-        android:visibility="visible"
-        app:layout_constraintStart_toStartOf="@+id/ltv_productos"
-        app:layout_constraintTop_toBottomOf="@+id/ltv_productos"
-        app:srcCompat="@mipmap/ic_icono_ok" />
 
     <TextView
         android:id="@+id/txv_mensajes_productos"
@@ -23,12 +12,15 @@
         android:layout_height="35dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imv_icono_error_productos"
         app:layout_constraintTop_toBottomOf="@+id/ltv_productos" />
 
     <ListView
         android:id="@+id/ltv_productos"
-        android:layout_width="375dp"
+        android:layout_width="354dp"
         android:layout_height="402dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
@@ -46,7 +38,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:drawableLeft="@drawable/ic_icono_anadir_carrito"
         android:text="Añadir producto"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -59,19 +50,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:drawableLeft="@drawable/ic_icono_compra_finalizada"
         android:text="Compra finalizada"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ltv_productos"
         app:layout_constraintVertical_bias="1.0" />
-
-    <ImageView
-        android:id="@+id/imv_icono_error_productos"
-        android:layout_width="22dp"
-        android:layout_height="22dp"
-        app:layout_constraintStart_toStartOf="@+id/ltv_productos"
-        app:layout_constraintTop_toBottomOf="@+id/ltv_productos"
-        app:srcCompat="@mipmap/ic_icono_error" />
 
 </android.support.constraint.ConstraintLayout>

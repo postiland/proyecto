@@ -44,6 +44,8 @@ public class VistaBorrarCuenta extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vista_borrar_cuenta);
 
+        getSupportActionBar().hide();
+
         txv_aviso_borrar_cuenta = (TextView) findViewById(R.id.txv_aviso_borrar_cuenta);
         txv_cuenta_borra = (TextView) findViewById(R.id.txv_cuenta_borra);
         txv_aviso_imposible_borrar = (TextView) findViewById(R.id.txv_aviso_imposible_borrar);

@@ -4,37 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color1"
     tools:context=".VistaListas">
 
     <TextView
         android:id="@+id/txv_mensajes_listas"
         android:layout_width="332dp"
         android:layout_height="30dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginLeft="12dp"
-        app:layout_constraintStart_toEndOf="@+id/imv_icono_ok_listas"
-        app:layout_constraintTop_toBottomOf="@+id/ltv_listas" />
-
-    <ImageView
-        android:id="@+id/imv_icono_errores_listas"
-        android:layout_width="22dp"
-        android:layout_height="22dp"
-        android:src="@mipmap/ic_launcher_foreground"
-        android:visibility="visible"
-        app:layout_constraintStart_toStartOf="@+id/ltv_listas"
         app:layout_constraintTop_toBottomOf="@+id/ltv_listas"
-        app:srcCompat="@mipmap/ic_icono_error" />
-
-    <ImageView
-        android:id="@+id/imv_icono_ok_listas"
-        android:layout_width="22dp"
-        android:layout_height="22dp"
-        android:src="@mipmap/ic_launcher_foreground"
-        android:visibility="visible"
-        app:layout_constraintStart_toStartOf="@+id/ltv_listas"
-        app:layout_constraintTop_toBottomOf="@+id/ltv_listas"
-        app:srcCompat="@mipmap/ic_icono_ok" />
+        tools:layout_editor_absoluteX="42dp" />
 
     <ListView
         android:id="@+id/ltv_listas"
@@ -62,7 +39,6 @@
         android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:drawableLeft="@drawable/ic_icono_anadir_lista"
         android:text="Crear lista"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

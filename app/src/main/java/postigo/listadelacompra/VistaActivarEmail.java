@@ -21,6 +21,8 @@ public class VistaActivarEmail extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vista_activar_email);
 
+        getSupportActionBar().hide();
+
         txv_aviso_activar_cuenta = (TextView) findViewById(R.id.txv_aviso_activar_cuenta);
 
         btn_volver = (Button) findViewById(R.id.btn_vista_principal);

@@ -80,6 +80,8 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vista_productos_lista);
 
+        getSupportActionBar().hide();
+
         datosLista_id_lista= getIntent().getStringExtra("ID_LISTA");
 
         lista_productos=(ListView) findViewById(R.id.ltv_productos);
@@ -92,7 +94,7 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
 
         icono_errores = (ImageView) findViewById(R.id.imv_icono_error_productos);
         icono_errores.setVisibility(View.INVISIBLE);
-        icono_ok = (ImageView) findViewById(R.id.imv_icono_ok_productos);
+        //icono_ok = (ImageView) findViewById(R.id.imv_icono_ok_productos);
         icono_ok.setVisibility(View.INVISIBLE);
         txv_mensajes = (TextView) findViewById(R.id.txv_mensajes_productos);
 

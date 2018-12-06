@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -60,6 +61,8 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pagina_principal);
 
+        getSupportActionBar().hide();
+
         btn_login=(Button) findViewById(R.id.btn_acceder);
         btn_login.setOnClickListener(this);
         btn_registro = (Button) findViewById(R.id.btn_registro_usuario);
@@ -70,16 +73,45 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
         btn_cambiar_contrasena.setOnClickListener(this);
 
         email = (EditText) findViewById(R.id.txv_email_usuario);
-        email.requestFocus();
+        email.setText("E-mail");
+        email.setTextColor(getResources().getColor(R.color.gris));
         contrasena = (EditText) findViewById(R.id.txv_contrasena_usuario);
+        contrasena.setInputType(InputType.TYPE_CLASS_TEXT);
+        contrasena.setText("Contraseña");
+        contrasena.setTextColor(getResources().getColor(R.color.gris));
 
-        icono_error_email = (ImageView) findViewById(R.id.imv_icono_error_email);
-        icono_error_email.setVisibility(View.INVISIBLE);
-        txv_error_email = (TextView) findViewById(R.id.txv_error_email);
+        email.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (hasFocus) {
+                    String cojoTextoActual = String.valueOf(email.getText());
+                    if (cojoTextoActual.equals("E-mail")){
+                        email.setText("");
+                    }
+                }
+            }
+        });
 
-        icono_error_contrasena = (ImageView) findViewById(R.id.imv_icono_error_contrasena);
-        icono_error_contrasena.setVisibility(View.INVISIBLE);
-        txv_error_contrasena = (TextView) findViewById(R.id.txv_error_contrasena);
+        contrasena.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (hasFocus) {
+                    String cojoTextoActual = String.valueOf(contrasena.getText());
+                    if (cojoTextoActual.equals("Contraseña")){
+                        contrasena.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                        contrasena.setText("");
+                    }
+                }
+            }
+        });
+
+        //icono_error_email = (ImageView) findViewById(R.id.imv_icono_error_email);
+        //icono_error_email.setVisibility(View.INVISIBLE);
+        //txv_error_email = (TextView) findViewById(R.id.txv_error_email);
+
+        //icono_error_contrasena = (ImageView) findViewById(R.id.imv_icono_error_contrasena);
+        //icono_error_contrasena.setVisibility(View.INVISIBLE);
+        //txv_error_contrasena = (TextView) findViewById(R.id.txv_error_contrasena);
 
 
 
@@ -91,6 +123,8 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
                 contrasena.requestFocus();
             }
         }
+
+        btn_login.requestFocus();
     }
 
     @Override

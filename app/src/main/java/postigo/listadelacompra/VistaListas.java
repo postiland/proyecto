@@ -92,6 +92,8 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vista_listas);
 
+        getSupportActionBar().hide();
+
         datosUsuario_id_usuario= getIntent().getStringExtra("ID_USUARIO");
         datosUsuario_nombre_usuario= getIntent().getStringExtra("NOMBRE_USUARIO");
 
@@ -102,9 +104,9 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
 
         txv_nom_lis = (TextView) findViewById(R.id.txv_nombre_lista);
 
-        icono_errores = (ImageView) findViewById(R.id.imv_icono_errores_listas);
+        //icono_errores = (ImageView) findViewById(R.id.imv_icono_errores_listas);
         icono_errores.setVisibility(View.INVISIBLE);
-        icono_ok = (ImageView) findViewById(R.id.imv_icono_ok_listas);
+        //icono_ok = (ImageView) findViewById(R.id.imv_icono_ok_listas);
         icono_ok.setVisibility(View.INVISIBLE);
         txv_mensajes = (TextView) findViewById(R.id.txv_mensajes_listas);
 
