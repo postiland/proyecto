@@ -4,56 +4,123 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/background_light"
     tools:context=".VistaActivarEmail">
 
     <TextView
         android:id="@+id/txv_aviso_activar_cuenta_confirmacion"
-        android:layout_width="143dp"
-        android:layout_height="59dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="175dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:gravity="center"
-        android:text="hemos enviado un correo de activación a tu cuenta"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txv_activar_cuenta" />
+        android:text="Te hemos enviado un"
+        android:textColor="@color/verdeOscuro"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@+id/txv_activar_cuenta"
+        app:layout_constraintStart_toStartOf="@+id/txv_activar_cuenta"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <TextView
-        android:id="@+id/txv_aviso_activar_cuenta"
+        android:id="@+id/txv_aviso_activar_cuenta_saludo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="168dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/imageView2"
+        app:layout_constraintStart_toStartOf="@+id/txv_activar_cuenta"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
+    <TextView
+        android:id="@+id/txv_aviso_activar_cuenta_nombre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="12dp"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/txv_aviso_activar_cuenta_saludo"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
     <TextView
         android:id="@+id/txv_activar_cuenta"
-        android:layout_width="151dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="64dp"
         android:gravity="center"
-        android:text="Antes de empezar a crear tu lista debes activar la cuenta"
+        android:text="Antes de empezar a crear tu lista debes"
+        android:textColor="@color/verdeOscuro"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txv_aviso_activar_cuenta"
-        app:layout_constraintVertical_bias="0.038" />
+        app:layout_constraintTop_toTopOf="@+id/txv_aviso_activar_cuenta_nombre" />
 
     <Button
         android:id="@+id/btn_vista_principal"
-        android:layout_width="match_parent"
+        android:layout_width="500dp"
         android:layout_height="wrap_content"
-        android:text="Volver a iniciar sesion"
+        android:background="@color/verdeClaro"
+        android:text="Iniciar sesion"
+        android:textColor="@android:color/background_light"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_icono_email_enviado" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="activar la cuenta."
+        android:textColor="@color/negro"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/txv_activar_cuenta"
+        app:layout_constraintStart_toStartOf="@+id/txv_activar_cuenta"
+        app:layout_constraintTop_toBottomOf="@+id/txv_activar_cuenta" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="corredo de activación."
+        android:textColor="@color/negro"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/txv_aviso_activar_cuenta_confirmacion"
+        app:layout_constraintStart_toStartOf="@+id/txv_aviso_activar_cuenta_confirmacion"
+        app:layout_constraintTop_toBottomOf="@+id/txv_aviso_activar_cuenta_confirmacion" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:text="¡Revisa tu correo electrónico!"
+        android:textColor="@color/verdeOscuro"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@+id/txv_aviso_activar_cuenta_confirmacion"
+        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintStart_toStartOf="@+id/txv_aviso_activar_cuenta_confirmacion"
+        app:layout_constraintTop_toBottomOf="@+id/txv_aviso_activar_cuenta_confirmacion" />
 
 </android.support.constraint.ConstraintLayout>

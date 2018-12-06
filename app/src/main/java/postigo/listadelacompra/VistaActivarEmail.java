@@ -9,7 +9,8 @@ import android.widget.TextView;
 
 public class VistaActivarEmail extends AppCompatActivity implements View.OnClickListener{
 
-    private TextView txv_aviso_activar_cuenta;
+    private TextView txv_aviso_activar_cuenta_saludo;
+    private TextView txv_aviso_activar_cuenta_nombre;
 
     Button btn_volver;
 
@@ -23,7 +24,8 @@ public class VistaActivarEmail extends AppCompatActivity implements View.OnClick
 
         getSupportActionBar().hide();
 
-        txv_aviso_activar_cuenta = (TextView) findViewById(R.id.txv_aviso_activar_cuenta);
+        txv_aviso_activar_cuenta_saludo = (TextView) findViewById(R.id.txv_aviso_activar_cuenta_saludo);
+        txv_aviso_activar_cuenta_nombre = (TextView) findViewById(R.id.txv_aviso_activar_cuenta_nombre);
 
         btn_volver = (Button) findViewById(R.id.btn_vista_principal);
         btn_volver.setOnClickListener(this);
@@ -31,7 +33,11 @@ public class VistaActivarEmail extends AppCompatActivity implements View.OnClick
         email_usuario = getIntent().getStringExtra("EMAIL_NUEVO_USUARIO");
         nombre_usuario = getIntent().getStringExtra("NOMBRE_NUEVO_USUARIO");
 
-        txv_aviso_activar_cuenta.setText("Bienvenido, "+nombre_usuario);
+        txv_aviso_activar_cuenta_saludo.setText("¡Hola,");
+        txv_aviso_activar_cuenta_saludo.setTextColor(getResources().getColor(R.color.negro));
+
+        txv_aviso_activar_cuenta_nombre.setText(nombre_usuario+"!");
+        txv_aviso_activar_cuenta_nombre.setTextColor(getResources().getColor(R.color.verdeClaro));
 
     }
 

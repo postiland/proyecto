@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/background_light"
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
     tools:context=".VistaRegistroUsuario">
@@ -106,6 +107,7 @@
         android:ems="10"
         android:inputType="text"
         android:maxLength="20"
+        android:text="antonio"
         android:textColorLink="@color/verdeClaro"
         app:layout_constraintBottom_toTopOf="@+id/txv_apellidos"
         app:layout_constraintEnd_toEndOf="parent"
@@ -123,6 +125,7 @@
         android:ems="10"
         android:inputType="text"
         android:maxLength="60"
+        android:text="postigo"
         android:textColorLink="@color/verdeClaro"
         app:layout_constraintBottom_toTopOf="@+id/txv_telefono"
         app:layout_constraintEnd_toEndOf="parent"
@@ -142,10 +145,7 @@
         android:inputType="text"
         android:maxLength="60"
         android:selectAllOnFocus="true"
-        android:shadowColor="@color/verdeClaro"
-        android:textColorHighlight="@color/verdeClaro"
-        android:textColorHint="@color/verdeClaro"
-        android:textColorLink="@color/verdeClaro"
+        android:text="postiland@gmail.com"
         app:layout_constraintBottom_toTopOf="@+id/txv_nombre"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -162,6 +162,7 @@
         android:ems="10"
         android:inputType="number"
         android:maxLength="9"
+        android:text="697293282"
         app:layout_constraintBottom_toTopOf="@+id/txv_contrasena"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -178,6 +179,7 @@
         android:ems="10"
         android:inputType="textPassword"
         android:maxLength="30"
+        android:text="Hola1234"
         app:layout_constraintBottom_toTopOf="@+id/txv_errores_registro"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

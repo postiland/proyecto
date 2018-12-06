@@ -100,8 +100,8 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
                     String cojoTextoActual = String.valueOf(contrasena.getText());
                     if (cojoTextoActual.equals("Contraseña")){
                         contrasena.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                        contrasena.setText("");
                         contrasena.setTextColor(getResources().getColor(R.color.negro));
+                        contrasena.setText("");
                     }
                 }
             }
@@ -121,8 +121,11 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
         if (nuevo_usuario != null){
             if (nuevo_usuario.length() > 0) {
                 email.setText(nuevo_usuario);
+                email.setTextColor(getResources().getColor(R.color.negro));
                 contrasena.setText("");
-                contrasena.requestFocus();
+                contrasena.setInputType(InputType.TYPE_CLASS_TEXT);
+                contrasena.setText("Contraseña");
+                contrasena.setTextColor(getResources().getColor(R.color.gris));
             }
         }
 
