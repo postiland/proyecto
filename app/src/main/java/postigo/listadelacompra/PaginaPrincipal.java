@@ -87,6 +87,7 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
                     String cojoTextoActual = String.valueOf(email.getText());
                     if (cojoTextoActual.equals("E-mail")){
                         email.setText("");
+                        email.setTextColor(getResources().getColor(R.color.negro));
                     }
                 }
             }
@@ -100,18 +101,19 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
                     if (cojoTextoActual.equals("Contraseña")){
                         contrasena.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                         contrasena.setText("");
+                        contrasena.setTextColor(getResources().getColor(R.color.negro));
                     }
                 }
             }
         });
 
-        //icono_error_email = (ImageView) findViewById(R.id.imv_icono_error_email);
-        //icono_error_email.setVisibility(View.INVISIBLE);
-        //txv_error_email = (TextView) findViewById(R.id.txv_error_email);
+        icono_error_email = (ImageView) findViewById(R.id.imv_icono_error_email);
+        icono_error_email.setVisibility(View.INVISIBLE);
+        txv_error_email = (TextView) findViewById(R.id.txv_error_email);
 
-        //icono_error_contrasena = (ImageView) findViewById(R.id.imv_icono_error_contrasena);
-        //icono_error_contrasena.setVisibility(View.INVISIBLE);
-        //txv_error_contrasena = (TextView) findViewById(R.id.txv_error_contrasena);
+        icono_error_contrasena = (ImageView) findViewById(R.id.imv_icono_error_contrasena);
+        icono_error_contrasena.setVisibility(View.INVISIBLE);
+        txv_error_contrasena = (TextView) findViewById(R.id.txv_error_contrasena);
 
 
 

@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -45,7 +46,11 @@ public class VistaRegistroUsuario extends AppCompatActivity implements View.OnCl
 
     private Usuario crearUsuario;
 
-    private ImageView icono_errores;
+    private ImageView icono_error_email;
+    private ImageView icono_error_nombre;
+    private ImageView icono_error_apellidos;
+    private ImageView icono_error_telefono;
+    private ImageView icono_error_contrasena;
 
     private TextView txv_errores;
 
@@ -60,26 +65,105 @@ public class VistaRegistroUsuario extends AppCompatActivity implements View.OnCl
         getSupportActionBar().hide();
 
         nombre = (EditText) findViewById(R.id.txv_nombre);
-        nombre.requestFocus();
+        nombre.setText("Nombre");
+        nombre.setTextColor(getResources().getColor(R.color.gris));
         apellidos = (EditText) findViewById(R.id.txv_apellidos);
+        apellidos.setText("Apellidos");
+        apellidos.setTextColor(getResources().getColor(R.color.gris));
         email = (EditText) findViewById(R.id.txv_email);
+        email.setText("E-mail");
+        email.setTextColor(getResources().getColor(R.color.gris));
         telefono = (EditText) findViewById(R.id.txv_telefono);
+        telefono.setText("Teléfono");
+        telefono.setTextColor(getResources().getColor(R.color.gris));
         contrasena = (EditText) findViewById(R.id.txv_contrasena);
+        contrasena.setInputType(InputType.TYPE_CLASS_TEXT);
+        contrasena.setText("Contraseña");
+        contrasena.setTextColor(getResources().getColor(R.color.gris));
 
         btn_registrate=(Button) findViewById(R.id.btn_registrate);
         btn_registrate.setOnClickListener(this);
 
-        //icono_errores = (ImageView) findViewById(R.id.imv_icono_errores_registro);
-        icono_errores.setVisibility(View.INVISIBLE);
+        cambiarTextoObtenerFoco();
+
+        icono_error_email = (ImageView) findViewById(R.id.imv_icono_error_email_registro);
+        icono_error_email.setVisibility(View.INVISIBLE);
+        icono_error_nombre = (ImageView) findViewById(R.id.imv_icono_error_nombre_registro);
+        icono_error_nombre.setVisibility(View.INVISIBLE);
+        icono_error_apellidos = (ImageView) findViewById(R.id.imv_icono_error_apellidos_registro);
+        icono_error_apellidos.setVisibility(View.INVISIBLE);
+        icono_error_telefono = (ImageView) findViewById(R.id.imv_icono_error_telefono_registro);
+        icono_error_telefono.setVisibility(View.INVISIBLE);
+        icono_error_contrasena = (ImageView) findViewById(R.id.imv_icono_error_contrasena_registro);
+        icono_error_contrasena.setVisibility(View.INVISIBLE);
         txv_errores = (TextView) findViewById(R.id.txv_errores_registro);
 
         cogerEmails();
     }
 
+    private void cambiarTextoObtenerFoco() {
+        nombre.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (hasFocus) {
+                    String cojoTextoActual = String.valueOf(nombre.getText());
+                    if (cojoTextoActual.equals("Nombre")){
+                        nombre.setText("");
+                    }
+                }
+            }
+        });
+        apellidos.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (hasFocus) {
+                    String cojoTextoActual = String.valueOf(apellidos.getText());
+                    if (cojoTextoActual.equals("Apellidos")){
+                        apellidos.setText("");
+                    }
+                }
+            }
+        });
+        email.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (hasFocus) {
+                    String cojoTextoActual = String.valueOf(email.getText());
+                    if (cojoTextoActual.equals("E-mail")){
+                        email.setText("");
+                    }
+                }
+            }
+        });
+        telefono.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (hasFocus) {
+                    String cojoTextoActual = String.valueOf(telefono.getText());
+                    if (cojoTextoActual.equals("Teléfono")){
+                        telefono.setText("");
+                    }
+                }
+            }
+        });
+        contrasena.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (hasFocus) {
+                    String cojoTextoActual = String.valueOf(contrasena.getText());
+                    if (cojoTextoActual.equals("Contraseña")){
+                        contrasena.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                        contrasena.setText("");
+                    }
+                }
+            }
+        });
+    }
+
     @Override
     public void onClick(View v) {
         if (v==btn_registrate){
-            icono_errores.setVisibility(View.INVISIBLE);
+            quitarErrores();
             txv_errores.setText("");
             txv_errores.setTextColor(Color.RED);
             if (comprobarCampos()){
@@ -90,6 +174,14 @@ public class VistaRegistroUsuario extends AppCompatActivity implements View.OnCl
                 startActivity(intent);
             }
         }
+    }
+
+    private void quitarErrores(){
+        icono_error_email.setVisibility(View.INVISIBLE);
+        icono_error_nombre.setVisibility(View.INVISIBLE);
+        icono_error_apellidos.setVisibility(View.INVISIBLE);
+        icono_error_telefono.setVisibility(View.INVISIBLE);
+        icono_error_contrasena.setVisibility(View.INVISIBLE);
     }
 
     private boolean comprobarCampos() {
@@ -109,18 +201,21 @@ public class VistaRegistroUsuario extends AppCompatActivity implements View.OnCl
 
         if (txv_email.isEmpty()){
             mostrarError("Debes introducir un email");
+            icono_error_email.setVisibility(View.VISIBLE);
             email.requestFocus();
             return false;
         }else{
             Matcher mather = modeloEmail.matcher(txv_email);
             if (!mather.find()){
                 mostrarError("Debes introducir un email válido");
+                icono_error_email.setVisibility(View.VISIBLE);
                 email.requestFocus();
                 return false;
             }else {
                 for (int i=0; i<emailsObtenidos.size(); i++){
                     if (txv_email.equals(emailsObtenidos.get(i))){
                         mostrarError("El email elegido ya existe");
+                        icono_error_email.setVisibility(View.VISIBLE);
                         email.requestFocus();
                         return false;
                     }
@@ -130,22 +225,26 @@ public class VistaRegistroUsuario extends AppCompatActivity implements View.OnCl
 
         if (txv_nombre.isEmpty()){
             mostrarError("Debes introducir un nombre");
+            icono_error_nombre.setVisibility(View.VISIBLE);
             nombre.requestFocus();
             return false;
         }
 
         if (txv_apellidos.isEmpty()){
             mostrarError("Debes introducir los apellidos");
+            icono_error_nombre.setVisibility(View.VISIBLE);
             apellidos.requestFocus();
             return false;
         }
 
         if (txv_telefono.isEmpty()){
             mostrarError("Debes introducir un telefono");
+            icono_error_telefono.setVisibility(View.VISIBLE);
             telefono.requestFocus();
             return false;
         }else if (txv_telefono.length() < 9){
             mostrarError("Debes introducir un telefono válido");
+            icono_error_telefono.setVisibility(View.VISIBLE);
             telefono.requestFocus();
             return false;
         }else {
@@ -153,6 +252,7 @@ public class VistaRegistroUsuario extends AppCompatActivity implements View.OnCl
                 numeroTelefono = Integer.parseInt(txv_telefono);
             }catch (Exception e){
                 mostrarError("Debes introducir un telefono válido");
+                icono_error_telefono.setVisibility(View.VISIBLE);
                 telefono.requestFocus();
                 return false;
             }
@@ -160,12 +260,14 @@ public class VistaRegistroUsuario extends AppCompatActivity implements View.OnCl
 
         if (txv_contrasena.isEmpty()){
             mostrarError("Debes introducir una contraseña");
+            icono_error_contrasena.setVisibility(View.VISIBLE);
             contrasena.requestFocus();
             return false;
         }else{
             Matcher mather = modeloContrasena.matcher(txv_contrasena);
             if (!mather.find()){
                 mostrarError("Debes introducir una contraseña válida");
+                icono_error_contrasena.setVisibility(View.VISIBLE);
                 contrasena.requestFocus();
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage("La contraseña debe tener:\n\n- Entre 8 y 16 caracteres.\n- Al menos 1 número.\n- Mayúsculas y minúsculas.")
@@ -204,7 +306,6 @@ public class VistaRegistroUsuario extends AppCompatActivity implements View.OnCl
     }
 
     private void mostrarError(String error){
-        icono_errores.setVisibility(View.VISIBLE);
         txv_errores.setText(error);
         txv_errores.setTextColor(Color.RED);
     }

@@ -4,114 +4,197 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
     tools:context=".VistaRegistroUsuario">
+
+    <ImageView
+        android:id="@+id/imv_icono_error_email_registro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/txv_email"
+        app:layout_constraintEnd_toStartOf="@+id/txv_email"
+        app:layout_constraintTop_toTopOf="@+id/txv_email"
+        app:layout_constraintVertical_bias="0.363"
+        app:srcCompat="@drawable/ic_icono_alerta" />
+
+    <ImageView
+        android:id="@+id/imv_icono_error_nombre_registro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/txv_nombre"
+        app:layout_constraintEnd_toStartOf="@+id/txv_nombre"
+        app:layout_constraintTop_toTopOf="@+id/txv_nombre"
+        app:layout_constraintVertical_bias="0.363"
+        app:srcCompat="@drawable/ic_icono_alerta" />
+
+    <ImageView
+        android:id="@+id/imv_icono_error_apellidos_registro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/txv_apellidos"
+        app:layout_constraintEnd_toStartOf="@+id/txv_apellidos"
+        app:layout_constraintTop_toTopOf="@+id/txv_apellidos"
+        app:layout_constraintVertical_bias="0.347"
+        app:srcCompat="@drawable/ic_icono_alerta" />
+
+    <ImageView
+        android:id="@+id/imv_icono_error_telefono_registro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/txv_telefono"
+        app:layout_constraintEnd_toStartOf="@+id/txv_telefono"
+        app:layout_constraintTop_toTopOf="@+id/txv_telefono"
+        app:layout_constraintVertical_bias="0.363"
+        app:srcCompat="@drawable/ic_icono_alerta" />
+
+    <ImageView
+        android:id="@+id/imv_icono_error_contrasena_registro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/txv_contrasena"
+        app:layout_constraintEnd_toStartOf="@+id/txv_contrasena"
+        app:layout_constraintTop_toTopOf="@+id/txv_contrasena"
+        app:layout_constraintVertical_bias="0.363"
+        app:srcCompat="@drawable/ic_icono_alerta" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="88dp"
+        android:layout_marginLeft="88dp"
+        android:layout_marginTop="8dp"
+        android:text="Nuevo"
+        android:textColor="@color/negro"
+        android:textSize="36sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="usuario"
+        android:textColor="@color/verdeClaro"
+        android:textSize="36sp"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <TextView
         android:id="@+id/txv_errores_registro"
-        android:layout_width="227dp"
-        android:layout_height="39dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/txv_contrasena"
-        tools:layout_editor_absoluteX="92dp" />
+        android:layout_width="280dp"
+        android:layout_height="30dp"
+        android:layout_marginBottom="4dp"
+        android:gravity="center"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_registrate"
+        app:layout_constraintEnd_toEndOf="@+id/txv_contrasena" />
 
     <EditText
         android:id="@+id/txv_nombre"
-        android:layout_width="282dp"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="8dp"
         android:ems="10"
         android:inputType="text"
         android:maxLength="20"
+        android:textColorLink="@color/verdeClaro"
         app:layout_constraintBottom_toTopOf="@+id/txv_apellidos"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/txv_apellidos"
-        android:layout_width="277dp"
+        android:layout_width="281dp"
         android:layout_height="47dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="8dp"
         android:ems="10"
         android:inputType="text"
         android:maxLength="60"
+        android:textColorLink="@color/verdeClaro"
         app:layout_constraintBottom_toTopOf="@+id/txv_telefono"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/txv_email"
-        android:layout_width="285dp"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="8dp"
         android:ems="10"
         android:inputType="text"
         android:maxLength="60"
         android:selectAllOnFocus="true"
+        android:shadowColor="@color/verdeClaro"
+        android:textColorHighlight="@color/verdeClaro"
+        android:textColorHint="@color/verdeClaro"
+        android:textColorLink="@color/verdeClaro"
         app:layout_constraintBottom_toTopOf="@+id/txv_nombre"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/txv_telefono"
-        android:layout_width="272dp"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="8dp"
         android:ems="10"
         android:inputType="number"
         android:maxLength="9"
         app:layout_constraintBottom_toTopOf="@+id/txv_contrasena"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/txv_contrasena"
-        android:layout_width="275dp"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="52dp"
+        android:layout_marginBottom="8dp"
         android:ems="10"
         android:inputType="textPassword"
         android:maxLength="30"
-        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintBottom_toTopOf="@+id/txv_errores_registro"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btn_registrate"
-        android:layout_width="match_parent"
+        android:layout_width="500dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
+        android:background="@color/verdeClaro"
         android:text="Registrate"
+        android:textColor="@android:color/background_light"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -120,54 +203,23 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginTop="56dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="28dp"
         android:text="Todos los campos son obligatorios"
-        app:layout_constraintBottom_toTopOf="@+id/btn_registrate"
+        android:textColor="@color/verdeOscuro"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.56"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Email:"
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="92dp"
         app:layout_constraintBottom_toTopOf="@+id/txv_email"
-        app:layout_constraintStart_toStartOf="@+id/txv_email"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="16dp"
-        android:text="Nombre:"
-        app:layout_constraintBottom_toTopOf="@+id/txv_nombre"
-        app:layout_constraintStart_toStartOf="@+id/txv_nombre" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Apellidos:"
-        app:layout_constraintBottom_toTopOf="@+id/txv_apellidos"
-        app:layout_constraintStart_toStartOf="@+id/txv_apellidos" />
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Telefono:"
-        app:layout_constraintBottom_toTopOf="@+id/txv_telefono"
-        app:layout_constraintStart_toStartOf="@+id/txv_telefono" />
-
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Contraseña:"
-        app:layout_constraintBottom_toTopOf="@+id/txv_contrasena"
-        app:layout_constraintStart_toStartOf="@+id/txv_contrasena" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ic_icono_anadir_usuario" />
 </android.support.constraint.ConstraintLayout>
