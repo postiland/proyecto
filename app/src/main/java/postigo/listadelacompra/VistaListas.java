@@ -107,9 +107,7 @@ public class VistaListas extends AppCompatActivity implements DialogNombreLista.
                 }
             }
         });
-
-        //txv_nom_lis = (TextView) findViewById(R.id.txv_nombre_lista);
-
+        
         icono_errores = (ImageView) findViewById(R.id.imv_icono_errores_listas);
         icono_errores.setVisibility(View.INVISIBLE);
         icono_ok = (ImageView) findViewById(R.id.imv_icono_ok_listas);
@@ -118,7 +116,6 @@ public class VistaListas extends AppCompatActivity implements DialogNombreLista.
 
         cogerListas();
 
-        //myAdapter = new ArrayAdapter<Lista>(this, android.R.layout.simple_list_item_1, listas_usuario);
         myAdapter = new ArrayAdapter<Lista>(this, R.layout.vista_item_producto, listas_usuario){
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
@@ -626,79 +623,6 @@ public class VistaListas extends AppCompatActivity implements DialogNombreLista.
     private void crearDialogInvitarUsuarioLista() {
         DialogInvitarUsuarioLista dialogInvitarUsuarioLista= new DialogInvitarUsuarioLista();
         dialogInvitarUsuarioLista.show(getSupportFragmentManager(), "Invitar a usuario");
-        /*AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-
-        LinearLayout layout = new LinearLayout(this);
-        LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        layout.setOrientation(LinearLayout.VERTICAL);
-        layout.setLayoutParams(parms);
-
-        layout.setGravity(Gravity.CLIP_VERTICAL);
-        layout.setPadding(2, 2, 2, 2);
-
-        TextView tv = new TextView(this);
-        tv.setText("INVITAR USUARIO A LA LISTA");
-        tv.setPadding(40, 40, 40, 40);
-        tv.setGravity(Gravity.CENTER);
-        tv.setTextSize(20);
-
-        final EditText et = new EditText(this);
-        TextView tv1 = new TextView(this);
-        tv1.setText("Email de usuario:");
-        int maxLengthNom = 60;
-        InputFilter[] fArray = new InputFilter[1];
-        fArray[0] = new InputFilter.LengthFilter(maxLengthNom);
-        et.setFilters(fArray);
-
-        LinearLayout.LayoutParams tv1Params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        tv1Params.bottomMargin = 5;
-        layout.addView(tv1, tv1Params);
-        layout.addView(et, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-
-        alertDialogBuilder.setView(layout);
-        alertDialogBuilder.setTitle("INVITAR USUARIO A LA LISTA");
-        alertDialogBuilder.setCustomTitle(tv);
-
-        // alertDialogBuilder.setMessage(message);
-        alertDialogBuilder.setCancelable(false);
-
-        // Setting Negative "Cancel" Button
-        alertDialogBuilder.setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                dialog.cancel();
-            }
-        });
-
-        // Setting Positive "OK" Button
-        alertDialogBuilder.setPositiveButton("INVITAR", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                try {
-                    String email_usuario = et.getText().toString();
-
-                    Matcher mather = modeloEmail.matcher(email_usuario);
-
-                    if (email_usuario.isEmpty()){
-                        mostrarMensajeInfo("Debes introducir un email!", true);
-                    }else {
-                        if (!mather.find()){
-                            mostrarMensajeInfo("Debes introducir un email válido", true);
-                        } else {
-                            invitarUsuarioLista(email_usuario);
-                        }
-                    }
-                }catch (Exception e){
-                    mostrarMensajeInfo("ERROR! Imposible invitar al usuario", true);
-                }
-            }
-        });
-
-        AlertDialog alertDialog = alertDialogBuilder.create();
-
-        try {
-            alertDialog.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
     }
 
     @Override

@@ -40,7 +40,7 @@ import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 
-public class VistaProductosLista extends AppCompatActivity implements View.OnClickListener{
+public class VistaProductosLista extends AppCompatActivity{
 
     private String datosLista_id_lista;
 
@@ -87,12 +87,22 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
         lista_productos=(ListView) findViewById(R.id.ltv_productos);
 
         btn_anadir_producto=(Button) findViewById(R.id.btn_anadir_producto);
-        btn_anadir_producto.setOnClickListener(this);
+        btn_anadir_producto.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                crearDialogAnadirProducto();
+            }
+        });
 
         btn_limpiar_lista=(Button) findViewById(R.id.btn_limpiar_lista);
-        btn_limpiar_lista.setOnClickListener(this);
+        btn_limpiar_lista.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                mostrarAlertDialogLimpiarLista("Vas a eliminar los productos de la lista ¿estas segura/o?");
+            }
+        });
 
-        icono_errores = (ImageView) findViewById(R.id.imv_icono_error_productos);
+        //icono_errores = (ImageView) findViewById(R.id.imv_icono_error_productos);
         //icono_errores.setVisibility(View.INVISIBLE);
         //icono_ok = (ImageView) findViewById(R.id.imv_icono_ok_productos);
         //icono_ok.setVisibility(View.INVISIBLE);
@@ -112,16 +122,34 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
                 mContenedor.producto = (TextView) itemLista.findViewById(R.id.txv_nom_pro_lis);
                 mContenedor.cantidad = (TextView) itemLista.findViewById(R.id.txv_cant_pro_list);
                 mContenedor.precio = (TextView) itemLista.findViewById(R.id.txv_prec_pro_list);
+                mContenedor.tituloCantidad = (TextView) itemLista.findViewById(R.id.txv_titulo_cantidad);
+                mContenedor.tituloPrecio = (TextView) itemLista.findViewById(R.id.txv_titulo_precio);
+                mContenedor.simboloEuro = (TextView) itemLista.findViewById(R.id.txv_simbolo_euro);
+                mContenedor.icono_tick = (ImageView) itemLista.findViewById(R.id.icono_tick);
 
                 mContenedor.producto.setText(productos_lista.get(position).getNombre_producto());
                 mContenedor.cantidad.setText(String.valueOf(productos_lista.get(position).getCantidad()));
                 mContenedor.precio.setText(String.valueOf(productos_lista.get(position).getPrecio()));
 
-                itemLista.setTag(mContenedor);
+                mContenedor.producto.setTextColor(getResources().getColor(R.color.negro));
+                mContenedor.cantidad.setTextColor(getResources().getColor(R.color.negro));
+                mContenedor.precio.setTextColor(getResources().getColor(R.color.negro));
+                mContenedor.tituloCantidad.setTextColor(getResources().getColor(R.color.negro));
+                mContenedor.tituloPrecio.setTextColor(getResources().getColor(R.color.negro));
+                mContenedor.simboloEuro.setTextColor(getResources().getColor(R.color.negro));
 
                 if (productos_lista.get(position).getComprado() == 1){
-                    itemLista.setBackgroundColor(Color.LTGRAY);
+                    itemLista.setBackgroundColor(getResources().getColor(R.color.grisClaro));
+                    mContenedor.icono_tick.setVisibility(View.VISIBLE);
+                    mContenedor.producto.setTextColor(getResources().getColor(R.color.verdeOscuro));
+                    mContenedor.cantidad.setTextColor(getResources().getColor(R.color.verdeOscuro));
+                    mContenedor.precio.setTextColor(getResources().getColor(R.color.verdeOscuro));
+                    mContenedor.tituloCantidad.setTextColor(getResources().getColor(R.color.verdeOscuro));
+                    mContenedor.tituloPrecio.setTextColor(getResources().getColor(R.color.verdeOscuro));
+                    mContenedor.simboloEuro.setTextColor(getResources().getColor(R.color.verdeOscuro));
                 }
+
+                itemLista.setTag(mContenedor);
 
                 return itemLista;
             }
@@ -221,30 +249,23 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
         TextView producto;
         TextView cantidad;
         TextView precio;
+        TextView tituloCantidad;
+        TextView tituloPrecio;
+        TextView simboloEuro;
+        ImageView icono_tick;
     }
 
     private void mostrarMensajeInfo(String mensaje, boolean esError){
         if (esError) {
-            icono_ok.setVisibility(View.INVISIBLE);
-            icono_errores.setVisibility(View.VISIBLE);
+            //icono_ok.setVisibility(View.INVISIBLE);
+            //icono_errores.setVisibility(View.VISIBLE);
             txv_mensajes.setTextColor(Color.RED);
         }else {
-            icono_errores.setVisibility(View.INVISIBLE);
-            icono_ok.setVisibility(View.VISIBLE);
+            //icono_errores.setVisibility(View.INVISIBLE);
+            //icono_ok.setVisibility(View.VISIBLE);
             txv_mensajes.setTextColor(Color.GREEN);
         }
         txv_mensajes.setText(mensaje);
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v==btn_anadir_producto){
-            crearDialogAnadirProducto();
-        }
-
-        if (v==btn_limpiar_lista){
-            mostrarAlertDialogLimpiarLista("Vas a eliminar los productos de la lista ¿estas segura/o?");
-        }
     }
 
     private void mostrarAlertDialogLimpiarLista(String mensaje){
@@ -536,7 +557,9 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
     }
 
     private void crearDialogAnadirProducto() {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        DialogProducto dialogProducto= new DialogProducto();
+        dialogProducto.show(getSupportFragmentManager(), "Anadir producto");
+        /*AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
         LinearLayout layout = new LinearLayout(this);
         LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -642,7 +665,7 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
             alertDialog.show();
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     private void crearDialogEditarProducto(final int id_producto, final String nombre_producto, final double precio_producto, final int cantidad_producto) {
