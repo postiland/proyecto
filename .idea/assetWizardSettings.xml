@@ -61,8 +61,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_icono_email_enviado" />
-                            <entry key="sourceFile" value="C:\Users\Postiland\Downloads\PostiApp Icons\PostiApp Icons\icono-email-enviado.svg" />
+                            <entry key="outputName" value="ic_icono_usuarios_lista" />
+                            <entry key="sourceFile" value="C:\Users\Postiland\Downloads\iconos app\icono-usuarios-lista.svg" />
                           </map>
                         </option>
                       </PersistentState>

@@ -93,9 +93,9 @@ public class VistaProductosLista extends AppCompatActivity implements View.OnCli
         btn_limpiar_lista.setOnClickListener(this);
 
         icono_errores = (ImageView) findViewById(R.id.imv_icono_error_productos);
-        icono_errores.setVisibility(View.INVISIBLE);
+        //icono_errores.setVisibility(View.INVISIBLE);
         //icono_ok = (ImageView) findViewById(R.id.imv_icono_ok_productos);
-        icono_ok.setVisibility(View.INVISIBLE);
+        //icono_ok.setVisibility(View.INVISIBLE);
         txv_mensajes = (TextView) findViewById(R.id.txv_mensajes_productos);
 
         cogerProductos(datosLista_id_lista);

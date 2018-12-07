@@ -1,26 +1,24 @@
 package postigo.listadelacompra;
 
 import android.app.ProgressDialog;
+import android.app.Service;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Color;
-import android.support.v4.app.FragmentManager;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.InputFilter;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -37,13 +35,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import cz.msebera.android.httpclient.Header;
 
-public class VistaListas extends AppCompatActivity implements View.OnClickListener{
+public class VistaListas extends AppCompatActivity implements DialogNombreLista.DialogCrearListaListener, DialogInvitarUsuarioLista.DialogInvitarUsuarioListaListener{
 
     private String datosUsuario_id_usuario;
     private String datosUsuario_nombre_usuario;
@@ -92,7 +89,8 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vista_listas);
 
-        getSupportActionBar().hide();
+        getSupportActionBar().setTitle("Listas activas");
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.verdeOscuro)));
 
         datosUsuario_id_usuario= getIntent().getStringExtra("ID_USUARIO");
         datosUsuario_nombre_usuario= getIntent().getStringExtra("NOMBRE_USUARIO");
@@ -100,19 +98,51 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
         lista_listas=(ListView) findViewById(R.id.ltv_listas);
 
         crear_lista=(Button) findViewById(R.id.btn_crear_lista);
-        crear_lista.setOnClickListener(this);
+        crear_lista.setOnClickListener(new View.OnClickListener(){
 
-        txv_nom_lis = (TextView) findViewById(R.id.txv_nombre_lista);
+            @Override
+            public void onClick(View v) {
+                if (v == crear_lista) {
+                    crearDialogCrearLista();
+                }
+            }
+        });
 
-        //icono_errores = (ImageView) findViewById(R.id.imv_icono_errores_listas);
+        //txv_nom_lis = (TextView) findViewById(R.id.txv_nombre_lista);
+
+        icono_errores = (ImageView) findViewById(R.id.imv_icono_errores_listas);
         icono_errores.setVisibility(View.INVISIBLE);
-        //icono_ok = (ImageView) findViewById(R.id.imv_icono_ok_listas);
+        icono_ok = (ImageView) findViewById(R.id.imv_icono_ok_listas);
         icono_ok.setVisibility(View.INVISIBLE);
         txv_mensajes = (TextView) findViewById(R.id.txv_mensajes_listas);
 
         cogerListas();
 
-        myAdapter = new ArrayAdapter<Lista>(this, android.R.layout.simple_list_item_1, listas_usuario);
+        //myAdapter = new ArrayAdapter<Lista>(this, android.R.layout.simple_list_item_1, listas_usuario);
+        myAdapter = new ArrayAdapter<Lista>(this, R.layout.vista_item_producto, listas_usuario){
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Service.LAYOUT_INFLATER_SERVICE);
+                View itemLista = inflater.inflate(R.layout.vista_item_lista, null);
+
+                if (listas_usuario.size() > 0) {
+                    ViewHolder mContenedor = new ViewHolder();
+                    mContenedor.nombre = (TextView) itemLista.findViewById(R.id.txv_nom_lis);
+                    mContenedor.numArticulos = (TextView) itemLista.findViewById(R.id.txv_total_articulos);
+                    mContenedor.numUsuarios = (TextView) itemLista.findViewById(R.id.txv_numero_usuarios);
+                    mContenedor.precioTotal = (TextView) itemLista.findViewById(R.id.txv_total_precio);
+
+                    mContenedor.nombre.setText(listas_usuario.get(position).getNombre());
+                    mContenedor.numArticulos.setText(String.valueOf(listas_usuario.get(position).getNumero_articulos()));
+                    mContenedor.numUsuarios.setText(String.valueOf(listas_usuario.get(position).getNumero_usuarios()));
+                    mContenedor.precioTotal.setText(String.valueOf(listas_usuario.get(position).getPrecio_total()));
+
+                    itemLista.setTag(mContenedor);
+                }
+
+                return itemLista;
+            }
+        };
         lista_listas.setAdapter(myAdapter);
 
         lista_listas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -131,7 +161,6 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 Lista lista = (Lista) lista_listas.getAdapter().getItem(position);
                 id_posicion_lista = position;
-
                 if (String.valueOf(lista.getId_usuario()).equals(datosUsuario_id_usuario)){
                     id_lista_borrar = lista.getId_lista();
                     nombre_lista_manipular = lista.getNombre();
@@ -150,10 +179,10 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
     private void mostrarMensajeInfo(String mensaje, boolean esError){
         if (esError) {
             icono_errores.setVisibility(View.VISIBLE);
-            txv_mensajes.setTextColor(Color.RED);
+            txv_mensajes.setTextColor(getResources().getColor(R.color.rojo));
         }else {
             icono_ok.setVisibility(View.VISIBLE);
-            txv_mensajes.setTextColor(Color.GREEN);
+            txv_mensajes.setTextColor(getResources().getColor(R.color.verdeOscuro));
         }
         txv_mensajes.setText(mensaje);
     }
@@ -204,13 +233,6 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
             return false;
         }
         return true;
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v == crear_lista) {
-            crearDialogCrearLista();
-        }
     }
 
     private void invitarUsuarioLista(String email_usuario_invitar) {
@@ -344,8 +366,11 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
 
                         data_user = datos_usuario.getJSONObject(i);
                         lista.setId_lista(Integer.parseInt(data_user.getString("id_lista")));
-                        lista.setNombre(data_user.getString("nombre"));
                         lista.setId_usuario(Integer.parseInt(data_user.getString("id_usuario")));
+                        lista.setNombre(data_user.getString("nombre"));
+                        lista.setNumero_usuarios(Integer.parseInt(data_user.getString("numUsuarios")));
+                        lista.setNumero_articulos(Integer.parseInt(data_user.getString("numArticulos")));
+                        lista.setPrecio_total(Double.parseDouble(data_user.getString("precioTotal")));
 
                         listas_usuario.add(lista);
                     }
@@ -569,148 +594,39 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
     }
 
     private void crearDialogCrearLista() {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        DialogNombreLista dialogCrearLista= new DialogNombreLista();
+        dialogCrearLista.show(getSupportFragmentManager(), "Crear lista");
+    }
 
-        LinearLayout layout = new LinearLayout(this);
-        LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        layout.setOrientation(LinearLayout.VERTICAL);
-        layout.setLayoutParams(parms);
 
-        layout.setGravity(Gravity.CLIP_VERTICAL);
-        layout.setPadding(2, 2, 2, 2);
-
-        TextView tv = new TextView(this);
-        tv.setText("CREAR LISTA");
-        tv.setPadding(40, 40, 40, 40);
-        tv.setGravity(Gravity.CENTER);
-        tv.setTextSize(20);
-
-        final EditText et = new EditText(this);
-        TextView tv1 = new TextView(this);
-        tv1.setText("Nombre lista:");
-        int maxLengthNom = 20;
-        InputFilter[] fArray = new InputFilter[1];
-        fArray[0] = new InputFilter.LengthFilter(maxLengthNom);
-        et.setFilters(fArray);
-
-        LinearLayout.LayoutParams tv1Params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        tv1Params.bottomMargin = 5;
-        layout.addView(tv1, tv1Params);
-        layout.addView(et, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-
-        alertDialogBuilder.setView(layout);
-        alertDialogBuilder.setTitle("CREAR LISTA");
-        // alertDialogBuilder.setMessage("Input Student ID");
-        alertDialogBuilder.setCustomTitle(tv);
-
-        // alertDialogBuilder.setMessage(message);
-        alertDialogBuilder.setCancelable(false);
-
-        // Setting Negative "Cancel" Button
-        alertDialogBuilder.setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                dialog.cancel();
-            }
-        });
-
-        // Setting Positive "OK" Button
-        alertDialogBuilder.setPositiveButton("CREAR LISTA", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                try {
-                    String nombre_lista = et.getText().toString();
-                    if (!nombre_lista.isEmpty()) {
-                        crearLista(et.getText().toString());
-                    }else {
-                        mostrarMensajeInfo("Debes introducir un nombre", true);
-                    }
-                }catch (Exception e){
-                    mostrarMensajeInfo("ERROR! Imposible crear lista", true);
+    @Override
+    public void cogerTextoCrearLista(String nombre_lista, boolean isNew) {
+        try {
+            if (nombre_lista.isEmpty() || nombre_lista.equals("Nombre lista")){
+                mostrarMensajeInfo("Debes introducir un nombre de lista", true);
+            }else {
+                if (isNew) {
+                    crearLista(nombre_lista);
+                }else {
+                    editarLista(nombre_lista);
                 }
             }
-        });
 
-        AlertDialog alertDialog = alertDialogBuilder.create();
-
-        try {
-            alertDialog.show();
-        } catch (Exception e) {
-            e.printStackTrace();
+        }catch (Exception e){
+            mostrarMensajeInfo("ERROR! Imposible crear lista", true);
         }
     }
 
     private void crearDialogEditarLista(String nombre_lista_pulsada) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-
-        LinearLayout layout = new LinearLayout(this);
-        LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        layout.setOrientation(LinearLayout.VERTICAL);
-        layout.setLayoutParams(parms);
-
-        layout.setGravity(Gravity.CLIP_VERTICAL);
-        layout.setPadding(2, 2, 2, 2);
-
-        TextView tv = new TextView(this);
-        tv.setText("EDITAR LISTA");
-        tv.setPadding(40, 40, 40, 40);
-        tv.setGravity(Gravity.CENTER);
-        tv.setTextSize(20);
-
-        final EditText et = new EditText(this);
-        et.setText(nombre_lista_pulsada);
-        TextView tv1 = new TextView(this);
-        tv1.setText("Nombre lista:");
-        int maxLengthNom = 20;
-        InputFilter[] fArray = new InputFilter[1];
-        fArray[0] = new InputFilter.LengthFilter(maxLengthNom);
-        et.setFilters(fArray);
-
-        LinearLayout.LayoutParams tv1Params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        tv1Params.bottomMargin = 5;
-        layout.addView(tv1, tv1Params);
-        layout.addView(et, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-
-        alertDialogBuilder.setView(layout);
-        alertDialogBuilder.setTitle("EDITAR LISTA");
-        // alertDialogBuilder.setMessage("Input Student ID");
-        alertDialogBuilder.setCustomTitle(tv);
-
-        // alertDialogBuilder.setMessage(message);
-        alertDialogBuilder.setCancelable(false);
-
-        // Setting Negative "Cancel" Button
-        alertDialogBuilder.setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                dialog.cancel();
-            }
-        });
-
-        // Setting Positive "OK" Button
-        alertDialogBuilder.setPositiveButton("EDITAR LISTA", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                try {
-                    String nombre_lista = et.getText().toString();
-                    if (!nombre_lista.isEmpty()) {
-                        editarLista(nombre_lista);
-                    }else {
-                        mostrarMensajeInfo("Debes introducir un nombre", true);
-                    }
-                }catch (Exception e){
-                    mostrarMensajeInfo("ERROR! Imposible editar lista", true);
-                }
-            }
-        });
-
-        AlertDialog alertDialog = alertDialogBuilder.create();
-
-        try {
-            alertDialog.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        DialogNombreLista dialogCrearLista= new DialogNombreLista();
+        dialogCrearLista.setNomListEdit(nombre_lista_pulsada);
+        dialogCrearLista.show(getSupportFragmentManager(), "Editar lista");
     }
 
     private void crearDialogInvitarUsuarioLista() {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        DialogInvitarUsuarioLista dialogInvitarUsuarioLista= new DialogInvitarUsuarioLista();
+        dialogInvitarUsuarioLista.show(getSupportFragmentManager(), "Invitar a usuario");
+        /*AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
         LinearLayout layout = new LinearLayout(this);
         LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -782,6 +698,33 @@ public class VistaListas extends AppCompatActivity implements View.OnClickListen
             alertDialog.show();
         } catch (Exception e) {
             e.printStackTrace();
+        }*/
+    }
+
+    @Override
+    public void cogerTextoCrearLista(String email_usuario) {
+        try {
+            Matcher mather = modeloEmail.matcher(email_usuario);
+
+            if (email_usuario.isEmpty() || email_usuario.equals("E-mail usuario")){
+                mostrarMensajeInfo("Debes introducir un email", true);
+            }else {
+                if (!mather.find()){
+                    mostrarMensajeInfo("Debes introducir un email válido", true);
+                } else {
+                    invitarUsuarioLista(email_usuario);
+                }
+            }
+        }catch (Exception e){
+            mostrarMensajeInfo("ERROR! Imposible invitar al usuario", true);
         }
+    }
+
+
+    private static class ViewHolder {
+        TextView nombre;
+        TextView numArticulos;
+        TextView numUsuarios;
+        TextView precioTotal;
     }
 }

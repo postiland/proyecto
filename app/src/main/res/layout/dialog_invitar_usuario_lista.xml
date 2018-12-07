@@ -12,7 +12,7 @@
         android:layout_height="100dp"
         android:layout_marginLeft="120dp"
         android:layout_marginTop="8dp"
-        app:srcCompat="@drawable/ic_icono_compra_ok" />
+        app:srcCompat="@drawable/ic_icono_anadir_usuario" />
 
     <TextView
         android:id="@+id/textView19"
@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:gravity="center"
-        android:text="Crear nueva lista"
+        android:text="Invitar usuario a la lista"
         android:textColor="@color/negro"
         android:textSize="24sp" />
 
@@ -33,6 +33,6 @@
         android:layout_marginRight="60dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Nombre lista" />
+        android:text="E-mail usuario" />
 
 </LinearLayout>

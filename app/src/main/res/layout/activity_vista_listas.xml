@@ -4,14 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/grisClaro"
     tools:context=".VistaListas">
 
     <TextView
         android:id="@+id/txv_mensajes_listas"
         android:layout_width="332dp"
         android:layout_height="30dp"
-        app:layout_constraintTop_toBottomOf="@+id/ltv_listas"
-        tools:layout_editor_absoluteX="42dp" />
+        android:layout_marginTop="4dp"
+        app:layout_constraintEnd_toEndOf="@+id/ltv_listas"
+        app:layout_constraintTop_toBottomOf="@+id/ltv_listas" />
 
     <ListView
         android:id="@+id/ltv_listas"
@@ -23,6 +25,8 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
+        android:divider="@color/grisClaro"
+        android:dividerHeight="6.0sp"
         app:layout_constraintBottom_toTopOf="@+id/btn_crear_lista"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -33,15 +37,44 @@
     <Button
         android:id="@+id/btn_crear_lista"
         style="@style/Widget.AppCompat.Button"
-        android:layout_width="match_parent"
+        android:layout_width="500dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
+        android:background="@color/verdeClaro"
         android:text="Crear lista"
+        android:textColor="@android:color/background_light"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/imv_icono_errores_listas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_crear_lista"
+        app:layout_constraintEnd_toStartOf="@+id/txv_mensajes_listas"
+        app:layout_constraintTop_toBottomOf="@+id/ltv_listas"
+        app:layout_constraintVertical_bias="0.8"
+        app:srcCompat="@drawable/ic_icono_alerta" />
+
+    <ImageView
+        android:id="@+id/imv_icono_ok_listas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_crear_lista"
+        app:layout_constraintEnd_toStartOf="@+id/txv_mensajes_listas"
+        app:layout_constraintTop_toBottomOf="@+id/ltv_listas"
+        app:layout_constraintVertical_bias="0.8"
+        app:srcCompat="@drawable/ic_icono_check" />
 </android.support.constraint.ConstraintLayout>

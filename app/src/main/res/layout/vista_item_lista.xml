@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/txv_nom_prod"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/background_light">
+
+    <TextView
+        android:id="@+id/txv_nom_lis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        android:textColor="@color/negro"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Articulos:"
+        android:textColor="@color/verdeOscuro"
+        app:layout_constraintStart_toStartOf="@+id/txv_nom_lis"
+        app:layout_constraintTop_toBottomOf="@+id/txv_nom_lis" />
+
+    <TextView
+        android:id="@+id/txv_total_articulos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="12dp"
+        android:textColor="@color/verdeOscuro"
+        app:layout_constraintStart_toEndOf="@+id/textView9"
+        app:layout_constraintTop_toBottomOf="@+id/txv_nom_lis" />
+
+    <TextView
+        android:id="@+id/txv_total_precio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="12dp"
+        android:textColor="@color/verdeOscuro"
+        app:layout_constraintStart_toEndOf="@+id/textView11"
+        app:layout_constraintTop_toBottomOf="@+id/txv_nom_lis" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="12dp"
+        android:text="Total:"
+        android:textColor="@color/verdeOscuro"
+        app:layout_constraintStart_toEndOf="@+id/txv_total_articulos"
+        app:layout_constraintTop_toBottomOf="@+id/txv_nom_lis" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="12dp"
+        android:text="€"
+        android:textColor="@color/verdeOscuro"
+        app:layout_constraintStart_toEndOf="@+id/txv_total_precio"
+        app:layout_constraintTop_toBottomOf="@+id/txv_nom_lis" />
+
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/txv_numero_usuarios"
+        app:layout_constraintTop_toBottomOf="@+id/txv_nom_lis"
+        app:srcCompat="@drawable/ic_icono_usuarios_lista" />
+
+    <TextView
+        android:id="@+id/txv_numero_usuarios"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="4dp"
+        android:paddingRight="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txv_nom_lis" />
+</android.support.constraint.ConstraintLayout>

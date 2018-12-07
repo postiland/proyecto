@@ -5,6 +5,9 @@ public class Lista {
     private String nombre;
     private String codigo_grupo;
     private int id_usuario;
+    private int numero_usuarios;
+    private int numero_articulos;
+    private double precio_total;
 
     public Lista() {}
 
@@ -38,6 +41,30 @@ public class Lista {
 
     public void setId_usuario(int id_usuario) {
         this.id_usuario = id_usuario;
+    }
+
+    public void setNumero_usuarios(int numero_usuarios) {
+        this.numero_usuarios = numero_usuarios;
+    }
+
+    public void setNumero_articulos(int numero_articulos) {
+        this.numero_articulos = numero_articulos;
+    }
+
+    public void setPrecio_total(double precio_total) {
+        this.precio_total = precio_total;
+    }
+
+    public int getNumero_usuarios() {
+        return numero_usuarios;
+    }
+
+    public int getNumero_articulos() {
+        return numero_articulos;
+    }
+
+    public double getPrecio_total() {
+        return precio_total;
     }
 
     @Override

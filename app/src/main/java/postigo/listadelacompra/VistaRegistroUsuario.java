@@ -65,20 +65,20 @@ public class VistaRegistroUsuario extends AppCompatActivity implements View.OnCl
         getSupportActionBar().hide();
 
         nombre = (EditText) findViewById(R.id.txv_nombre);
-        //nombre.setText("Nombre");
+        nombre.setText("Nombre");
         nombre.setTextColor(getResources().getColor(R.color.gris));
         apellidos = (EditText) findViewById(R.id.txv_apellidos);
-        //apellidos.setText("Apellidos");
+        apellidos.setText("Apellidos");
         apellidos.setTextColor(getResources().getColor(R.color.gris));
         email = (EditText) findViewById(R.id.txv_email);
-        //email.setText("E-mail");
+        email.setText("E-mail");
         email.setTextColor(getResources().getColor(R.color.gris));
         telefono = (EditText) findViewById(R.id.txv_telefono);
-        //telefono.setText("Teléfono");
+        telefono.setText("Teléfono");
         telefono.setTextColor(getResources().getColor(R.color.gris));
         contrasena = (EditText) findViewById(R.id.txv_contrasena);
         contrasena.setInputType(InputType.TYPE_CLASS_TEXT);
-        //contrasena.setText("Contraseña");
+        contrasena.setText("Contraseña");
         contrasena.setTextColor(getResources().getColor(R.color.gris));
 
         btn_registrate=(Button) findViewById(R.id.btn_registrate);
