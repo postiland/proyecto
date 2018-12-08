@@ -7,6 +7,8 @@
     android:background="@android:color/background_light"
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
+    android:screenOrientation="portrait"
+    android:configChanges="keyboardHidden|orientation|screenSize"
     tools:context=".PaginaPrincipal">
 
     <EditText

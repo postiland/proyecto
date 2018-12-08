@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -84,6 +85,8 @@ public class VistaListas extends AppCompatActivity implements DialogNombreLista.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vista_listas);
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         getSupportActionBar().setTitle("Listas activas");
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.verdeOscuro)));

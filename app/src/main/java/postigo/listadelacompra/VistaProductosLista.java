@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AlertDialog;
@@ -84,6 +85,8 @@ public class VistaProductosLista extends AppCompatActivity implements DialogProd
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vista_productos_lista);
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         datosLista_id_lista= getIntent().getStringExtra("ID_LISTA");
         datosLista_nombre_lista= getIntent().getStringExtra("NOMBRE_LISTA");
