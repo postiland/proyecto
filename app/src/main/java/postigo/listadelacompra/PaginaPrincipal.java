@@ -1,9 +1,12 @@
 package postigo.listadelacompra;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
@@ -38,6 +41,9 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
 
     private ImageView icono_error_contrasena;
     private TextView txv_error_contrasena;
+
+    private ImageView icono_info_principal;
+    private TextView txv_info_principal;
 
     public static final String URL_COMPROBAR_USUARIO = "http://antoniopostigo.es/Slim2-ok/api/usuario/email";
 
@@ -118,7 +124,9 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
         icono_error_contrasena.setVisibility(View.INVISIBLE);
         txv_error_contrasena = (TextView) findViewById(R.id.txv_error_contrasena);
 
-
+        icono_info_principal = (ImageView) findViewById(R.id.imv_icono_info_principal);
+        icono_info_principal.setVisibility(View.INVISIBLE);
+        txv_info_principal = (TextView) findViewById(R.id.txv_informacion_principal);
 
         nuevo_usuario = getIntent().getStringExtra("EMAIL_NUEVO_USUARIO");
         if (nuevo_usuario != null){
@@ -130,6 +138,17 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
                 contrasena.setText("Contraseña");
                 contrasena.setTextColor(getResources().getColor(R.color.gris));
             }
+        }
+
+        if (!isNetDisponible()){
+            txv_info_principal.setText("Por favor, revisa tu conexión. Para continuar debes tener conexión a internet.");
+            txv_info_principal.setTextColor(getResources().getColor(R.color.rojo));
+            btn_login.setEnabled(false);
+            btn_login.setBackgroundColor(getResources().getColor(R.color.gris));
+            btn_login.setTextColor(Color.WHITE);
+            btn_borrar_cuenta.setEnabled(false);
+            btn_cambiar_contrasena.setEnabled(false);
+            btn_registro.setEnabled(false);
         }
 
         btn_login.requestFocus();
@@ -158,16 +177,26 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
                 icono_error_email.setVisibility(View.VISIBLE);
                 txv_error_email.setText("Debes introducir un email");
                 email.requestFocus();
-                txv_error_email.setTextColor(Color.RED);
+                txv_error_email.setTextColor(getResources().getColor(R.color.rojo));
             }else if (!mather.find()) {
                 icono_error_email.setVisibility(View.VISIBLE);
                 txv_error_email.setText("Debes introducir un email válido");
                 email.requestFocus();
-                txv_error_email.setTextColor(Color.RED);
+                txv_error_email.setTextColor(getResources().getColor(R.color.rojo));
             }else {
                 mandarEmailCambiarContrasena(txv_email);
             }
         }
+    }
+
+    private boolean isNetDisponible() {
+
+        ConnectivityManager connectivityManager = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo actNetInfo = connectivityManager.getActiveNetworkInfo();
+
+        return (actNetInfo != null && actNetInfo.isConnected());
     }
 
     private void mandarEmailCambiarContrasena(String txv_email) {
@@ -196,9 +225,11 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
                     estado = response.getString("status");
 
                     if (estado.length()>0) {
-                        //Toast.makeText(getApplicationContext(), "Email enviado: "+estado, Toast.LENGTH_SHORT).show();
+                        icono_info_principal.setVisibility(View.VISIBLE);
+                        txv_info_principal.setText("Te hemos enviado un email revisa tu correo");
                     }else {
-
+                        txv_info_principal.setText("Ha ocurrido un error");
+                        txv_info_principal.setTextColor(getResources().getColor(R.color.rojo));
                     }
 
                 } catch (JSONException e) {
@@ -225,17 +256,17 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
             icono_error_email.setVisibility(View.VISIBLE);
             txv_error_email.setText("Debes introducir un email");
             email.requestFocus();
-            txv_error_email.setTextColor(Color.RED);
+            txv_error_email.setTextColor(getResources().getColor(R.color.rojo));
         }else if (!mather.find()) {
             icono_error_email.setVisibility(View.VISIBLE);
             txv_error_email.setText("Debes introducir un email válido");
             email.requestFocus();
-            txv_error_email.setTextColor(Color.RED);
+            txv_error_email.setTextColor(getResources().getColor(R.color.rojo));
         }else if (txv_contrasena.isEmpty()) {
             icono_error_contrasena.setVisibility(View.VISIBLE);
             txv_error_contrasena.setText("Debes introducir una contraseña");
             contrasena.requestFocus();
-            txv_error_contrasena.setTextColor(Color.RED);
+            txv_error_contrasena.setTextColor(getResources().getColor(R.color.rojo));
         }else {
             cogerUsuario(txv_email, getMD5(txv_contrasena), v);
         }
@@ -265,7 +296,7 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
                     if (datosUsuario.getCuenta_activa() == 0){
                         icono_error_email.setVisibility(View.VISIBLE);
                         txv_error_email.setText("Debes validar el email antes de iniciar sesión");
-                        txv_error_email.setTextColor(Color.RED);
+                        txv_error_email.setTextColor(getResources().getColor(R.color.rojo));
                     }else {
                         Intent intent = new Intent(getBaseContext(), VistaListas.class);
                         intent.putExtra("ID_USUARIO", String.valueOf(datosUsuario.getId_usuario()));
@@ -282,7 +313,7 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
                 icono_error_contrasena.setVisibility(View.VISIBLE);
                 txv_error_contrasena.setText("Contraseña incorrecta");
                 contrasena.requestFocus();
-                txv_error_contrasena.setTextColor(Color.RED);
+                txv_error_contrasena.setTextColor(getResources().getColor(R.color.rojo));
             }
         }
     }
@@ -327,7 +358,7 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
                         icono_error_email.setVisibility(View.VISIBLE);
                         txv_error_email.setText("El email introducido no existe");
                         email.requestFocus();
-                        txv_error_email.setTextColor(Color.RED);
+                        txv_error_email.setTextColor(getResources().getColor(R.color.rojo));
                     }
 
                 } catch (JSONException e) {

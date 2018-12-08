@@ -23,7 +23,7 @@
         android:ems="10"
         android:inputType="textPassword"
         android:maxLength="29"
-        android:text="Hola12345"
+        android:text="Hola1234"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/btn_acceder"
         app:layout_constraintEnd_toEndOf="parent"
@@ -124,6 +124,16 @@
         app:layout_constraintHorizontal_bias="0.428"
         app:layout_constraintStart_toEndOf="@+id/imageView4"
         app:layout_constraintTop_toBottomOf="@+id/txv_contrasena_usuario" />
+
+    <TextView
+        android:id="@+id/txv_informacion_principal"
+        android:layout_width="300dp"
+        android:layout_height="41dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginRight="28dp"
+        android:textColor="@color/verdeOscuro"
+        app:layout_constraintBottom_toTopOf="@+id/btn_acceder"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
         android:id="@+id/btn_cambiar_contrasena"
@@ -227,5 +237,20 @@
         app:layout_constraintTop_toTopOf="@+id/txv_error_contrasena"
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/ic_icono_alerta" />
+
+    <ImageView
+        android:id="@+id/imv_icono_info_principal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:paddingRight="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/txv_informacion_principal"
+        app:layout_constraintEnd_toStartOf="@+id/txv_informacion_principal"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/txv_informacion_principal"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/ic_icono_check" />
 
 </android.support.constraint.ConstraintLayout>

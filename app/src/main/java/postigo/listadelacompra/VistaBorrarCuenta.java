@@ -52,7 +52,7 @@ public class VistaBorrarCuenta extends AppCompatActivity implements View.OnClick
         txv_aviso_borrar_cuenta = (TextView) findViewById(R.id.txv_aviso_borrar_cuenta);
         txv_cuenta_borra = (TextView) findViewById(R.id.txv_cuenta_borra);
         txv_aviso_imposible_borrar = (TextView) findViewById(R.id.txv_aviso_imposible_borrar);
-        txv_aviso_borrar_cuenta.setText("Hola, "+getIntent().getStringExtra("NOMBRE_USUARIO"));
+        txv_aviso_borrar_cuenta.setText(getIntent().getStringExtra("NOMBRE_USUARIO"));
 
         btn_borrar_cuenta = (Button) findViewById(R.id.btn_borrar_cuenta);
         btn_borrar_cuenta.setOnClickListener(this);
@@ -105,10 +105,10 @@ public class VistaBorrarCuenta extends AppCompatActivity implements View.OnClick
                     estado = response.getString("status");
 
                     if (estado.length()>0 && estado.equals("OK")) {
-                        txv_aviso_borrar_cuenta.setText("Cuenta borrada");
-                        txv_cuenta_borra.setText("¡Pero siempre puedes volver\na registrarte!");
-                        txv_aviso_imposible_borrar.setText("");
+                        txv_cuenta_borra.setText("Cuenta borrada con éxito.");
+                        txv_aviso_imposible_borrar.setText("¡Pero siempre puedes volver\na registrarte!");
                         btn_borrar_cuenta.setEnabled(false);
+                        btn_borrar_cuenta.setBackgroundColor(getResources().getColor(R.color.gris));
                     }else {
                         txv_aviso_borrar_cuenta.setText("Hemos tenido un problema");
                         txv_cuenta_borra.setText("Imposible eliminar cuenta...");

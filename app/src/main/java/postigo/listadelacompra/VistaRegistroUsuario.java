@@ -173,7 +173,7 @@ public class VistaRegistroUsuario extends AppCompatActivity implements View.OnCl
         if (v==btn_registrate){
             quitarErrores();
             txv_errores.setText("");
-            txv_errores.setTextColor(Color.RED);
+            txv_errores.setTextColor(getResources().getColor(R.color.rojo));
             if (comprobarCampos()){
                 insertarUsuario();
                 Intent intent = new Intent(getBaseContext(), VistaActivarEmail.class);
@@ -314,7 +314,7 @@ public class VistaRegistroUsuario extends AppCompatActivity implements View.OnCl
 
     private void mostrarError(String error){
         txv_errores.setText(error);
-        txv_errores.setTextColor(Color.RED);
+        txv_errores.setTextColor(getResources().getColor(R.color.rojo));
     }
 
     private void cogerEmails() {
