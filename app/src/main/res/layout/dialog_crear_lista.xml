@@ -10,19 +10,39 @@
         android:id="@+id/imageView9"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginLeft="120dp"
+        android:layout_marginLeft="110dp"
         android:layout_marginTop="8dp"
         app:srcCompat="@drawable/ic_icono_compra_ok" />
 
-    <TextView
-        android:id="@+id/textView19"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="8dp"
-        android:gravity="center"
-        android:text="Crear nueva lista"
-        android:textColor="@color/negro"
-        android:textSize="24sp" />
+        android:gravity="fill_vertical|center_horizontal"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/titulo_dialog_nombre_lista"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="70dp"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="Crear nueva"
+            android:textColor="@color/negro"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/textView20"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="8dp"
+            android:gravity="left|center"
+            android:text="lista"
+            android:textColor="@color/verdeClaro"
+            android:textSize="24sp" />
+    </LinearLayout>
 
     <EditText
         android:id="@+id/edt_nom_lista"

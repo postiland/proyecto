@@ -3,6 +3,7 @@ package postigo.listadelacompra;
 import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AlertDialog;
@@ -45,6 +46,8 @@ public class VistaProductosLista extends AppCompatActivity implements DialogProd
 
     private String datosLista_id_lista;
     private String datosLista_nombre_lista;
+    private String datosUsuario_id_usuario;
+    private String datosUsuario_nombre_usuario;
 
     private int posicion_producto_editar;
 
@@ -84,6 +87,8 @@ public class VistaProductosLista extends AppCompatActivity implements DialogProd
 
         datosLista_id_lista= getIntent().getStringExtra("ID_LISTA");
         datosLista_nombre_lista= getIntent().getStringExtra("NOMBRE_LISTA");
+        datosUsuario_id_usuario= getIntent().getStringExtra("ID_USUARIO");
+        datosUsuario_nombre_usuario= getIntent().getStringExtra("NOMBRE_USUARIO");
 
         getSupportActionBar().setTitle("Lista: "+datosLista_nombre_lista);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.verdeOscuro)));
@@ -106,10 +111,10 @@ public class VistaProductosLista extends AppCompatActivity implements DialogProd
             }
         });
 
-        //icono_errores = (ImageView) findViewById(R.id.imv_icono_error_productos);
-        //icono_errores.setVisibility(View.INVISIBLE);
-        //icono_ok = (ImageView) findViewById(R.id.imv_icono_ok_productos);
-        //icono_ok.setVisibility(View.INVISIBLE);
+        icono_errores = (ImageView) findViewById(R.id.imv_icono_error_productos);
+        icono_errores.setVisibility(View.INVISIBLE);
+        icono_ok = (ImageView) findViewById(R.id.imv_icono_ok_productos);
+        icono_ok.setVisibility(View.INVISIBLE);
         txv_mensajes = (TextView) findViewById(R.id.txv_mensajes_productos);
 
         cogerProductos(datosLista_id_lista);
@@ -190,6 +195,14 @@ public class VistaProductosLista extends AppCompatActivity implements DialogProd
         registerForContextMenu(lista_productos);
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getBaseContext(), VistaListas.class);
+        intent.putExtra("ID_USUARIO", datosUsuario_id_usuario);
+        intent.putExtra("NOMBRE_USUARIO", datosUsuario_nombre_usuario);
+        startActivity(intent);
+    }
+
     private void cambiarEstadoComprado(final int comprado, final int id_producto) {
         final ProgressDialog progreso = new ProgressDialog(getApplicationContext());
         AsyncHttpClient client = new AsyncHttpClient();
@@ -263,13 +276,13 @@ public class VistaProductosLista extends AppCompatActivity implements DialogProd
 
     private void mostrarMensajeInfo(String mensaje, boolean esError){
         if (esError) {
-            //icono_ok.setVisibility(View.INVISIBLE);
-            //icono_errores.setVisibility(View.VISIBLE);
-            txv_mensajes.setTextColor(Color.RED);
+            icono_ok.setVisibility(View.INVISIBLE);
+            icono_errores.setVisibility(View.VISIBLE);
+            txv_mensajes.setTextColor(getResources().getColor(R.color.rojo));
         }else {
-            //icono_errores.setVisibility(View.INVISIBLE);
-            //icono_ok.setVisibility(View.VISIBLE);
-            txv_mensajes.setTextColor(Color.GREEN);
+            icono_errores.setVisibility(View.INVISIBLE);
+            icono_ok.setVisibility(View.VISIBLE);
+            txv_mensajes.setTextColor(getResources().getColor(R.color.verdeOscuro));
         }
         txv_mensajes.setText(mensaje);
     }

@@ -8,9 +8,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.InputFilter;
 import android.view.ContextMenu;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,9 +17,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,7 +36,7 @@ import java.util.regex.Pattern;
 
 import cz.msebera.android.httpclient.Header;
 
-public class VistaListas extends AppCompatActivity implements DialogNombreLista.DialogCrearListaListener, DialogInvitarUsuarioLista.DialogInvitarUsuarioListaListener{
+public class VistaListas extends AppCompatActivity implements DialogNombreLista.DialogNombreListaListener, DialogInvitarUsuarioLista.DialogInvitarUsuarioListaListener{
 
     private String datosUsuario_id_usuario;
     private String datosUsuario_nombre_usuario;
@@ -150,6 +146,8 @@ public class VistaListas extends AppCompatActivity implements DialogNombreLista.
                 Intent intent = new Intent(getBaseContext(), VistaProductosLista.class);
                 intent.putExtra("ID_LISTA", String.valueOf(lista.getId_lista()));
                 intent.putExtra("NOMBRE_LISTA", String.valueOf(lista.getNombre()));
+                intent.putExtra("ID_USUARIO", datosUsuario_id_usuario);
+                intent.putExtra("NOMBRE_USUARIO", datosUsuario_nombre_usuario);
                 startActivity(intent);
             }
         });

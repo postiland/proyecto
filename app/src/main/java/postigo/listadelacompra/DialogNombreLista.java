@@ -9,13 +9,17 @@ import android.support.v7.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class DialogNombreLista extends AppCompatDialogFragment {
 
+    private TextView titulo_dialog;
+
     private EditText nombre_lista;
 
-    private DialogCrearListaListener listener;
+    private DialogNombreListaListener listener;
 
     private String nom_list_edit = "";
 
@@ -34,12 +38,18 @@ public class DialogNombreLista extends AppCompatDialogFragment {
 
         nombre_lista = view.findViewById(R.id.edt_nom_lista);
 
+        titulo_dialog = view.findViewById(R.id.titulo_dialog_nombre_lista);
+
         nombre_lista.setTextColor(getResources().getColor(R.color.gris));
 
         if (!nom_list_edit.isEmpty()) {
             nombre_lista.setText(this.nom_list_edit);
             nombre_lista.setTextColor(getResources().getColor(R.color.negro));
             titulo_boton_ok = "Editar nombre";
+            titulo_dialog.setText("Editar");
+            LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            llp.setMargins(200, 8, 0, 0); // llp.setMargins(left, top, right, bottom);
+            titulo_dialog.setLayoutParams(llp);
         }
 
         builder.setView(view)
@@ -85,14 +95,14 @@ public class DialogNombreLista extends AppCompatDialogFragment {
         super.onAttach(context);
 
         try {
-            listener = (DialogCrearListaListener) context;
+            listener = (DialogNombreListaListener) context;
         }catch (Exception e){
-            Toast.makeText(getContext(), "Error al crear dialog crear lista:\n"+e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Error al crear dialog nombre lista:\n"+e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
     }
 
-    public interface DialogCrearListaListener{
+    public interface DialogNombreListaListener {
         void cogerTextoCrearLista(String nombre_lista, boolean isNew);
     }
 }
