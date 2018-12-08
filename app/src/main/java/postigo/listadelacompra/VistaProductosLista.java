@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -40,9 +41,10 @@ import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 
-public class VistaProductosLista extends AppCompatActivity{
+public class VistaProductosLista extends AppCompatActivity implements DialogProducto.DialogProductoListener{
 
     private String datosLista_id_lista;
+    private String datosLista_nombre_lista;
 
     private int posicion_producto_editar;
 
@@ -80,9 +82,11 @@ public class VistaProductosLista extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vista_productos_lista);
 
-        getSupportActionBar().hide();
-
         datosLista_id_lista= getIntent().getStringExtra("ID_LISTA");
+        datosLista_nombre_lista= getIntent().getStringExtra("NOMBRE_LISTA");
+
+        getSupportActionBar().setTitle("Lista: "+datosLista_nombre_lista);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.verdeOscuro)));
 
         lista_productos=(ListView) findViewById(R.id.ltv_productos);
 
@@ -243,6 +247,8 @@ public class VistaProductosLista extends AppCompatActivity{
             }
         });
     }
+
+
 
 
     private static class ViewHolder {
@@ -559,117 +565,47 @@ public class VistaProductosLista extends AppCompatActivity{
     private void crearDialogAnadirProducto() {
         DialogProducto dialogProducto= new DialogProducto();
         dialogProducto.show(getSupportFragmentManager(), "Anadir producto");
-        /*AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-
-        LinearLayout layout = new LinearLayout(this);
-        LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        layout.setOrientation(LinearLayout.VERTICAL);
-        layout.setLayoutParams(parms);
-
-        layout.setGravity(Gravity.CLIP_VERTICAL);
-        layout.setPadding(2, 2, 2, 2);
-
-        TextView tv = new TextView(this);
-        tv.setText("AÑADIR PRODUCTO");
-        tv.setPadding(40, 40, 40, 40);
-        tv.setGravity(Gravity.CENTER);
-        tv.setTextSize(20);
-
-        final EditText edt_nom_pro = new EditText(this);
-        TextView txv_nom_pro = new TextView(this);
-        txv_nom_pro.setText("Nombre producto:");
-        int maxLengthNom = 20;
-        InputFilter[] fArray = new InputFilter[1];
-        fArray[0] = new InputFilter.LengthFilter(maxLengthNom);
-        edt_nom_pro.setFilters(fArray);
-
-        final EditText edt_pro_cant = new EditText(this);
-        edt_pro_cant.setInputType(InputType.TYPE_CLASS_NUMBER);
-        edt_pro_cant.setText("1");
-        int maxLengthCant = 4;
-        InputFilter[] fArrayC = new InputFilter[1];
-        fArrayC[0] = new InputFilter.LengthFilter(maxLengthCant);
-        edt_pro_cant.setFilters(fArrayC);
-        TextView txv_pro_cant = new TextView(this);
-        txv_pro_cant.setText("Cantidad:");
-
-        final EditText edt_pro_prec = new EditText(this);
-        edt_pro_prec.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-        edt_pro_prec.setText("0");
-        int maxLengthPre = 7;
-        InputFilter[] fArrayP = new InputFilter[1];
-        fArrayP[0] = new InputFilter.LengthFilter(maxLengthPre);
-        edt_pro_prec.setFilters(fArrayP);
-        TextView txv_pro_prec = new TextView(this);
-        txv_pro_prec.setText("Precio:");
-
-        LinearLayout.LayoutParams tv1Params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        tv1Params.bottomMargin = 5;
-        LinearLayout.LayoutParams tv2Params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        tv2Params.topMargin = 5;
-        tv2Params.bottomMargin = 5;
-        LinearLayout.LayoutParams tv3Params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        tv3Params.topMargin = 5;
-        tv3Params.bottomMargin = 5;
-
-        layout.addView(txv_nom_pro, tv1Params);
-        layout.addView(edt_nom_pro, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        layout.addView(txv_pro_cant, tv2Params);
-        layout.addView(edt_pro_cant, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        layout.addView(txv_pro_prec, tv3Params);
-        layout.addView(edt_pro_prec, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-
-        alertDialogBuilder.setView(layout);
-        alertDialogBuilder.setTitle("AÑADIR PRODUCTO");
-        alertDialogBuilder.setCustomTitle(tv);
-
-        alertDialogBuilder.setCancelable(false);
-
-        // Setting Negative "Cancel" Button
-        alertDialogBuilder.setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                dialog.cancel();
-            }
-        });
-
-        // Setting Positive "OK" Button
-        alertDialogBuilder.setPositiveButton("AÑADIR PRODUCTO", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                try {
-                    int cant_pro = 1;
-                    double prec_pro = 0;
-
-                    //DecimalFormat df2 = new DecimalFormat("####.##");
-
-                    if (!edt_nom_pro.getText().toString().isEmpty()){
-                        if (!edt_pro_cant.getText().toString().isEmpty()){
-                            cant_pro = Integer.parseInt(edt_pro_cant.getText().toString());
-                        }
-                        if (!edt_pro_prec.getText().toString().isEmpty()){
-                            prec_pro = Double.parseDouble(edt_pro_prec.getText().toString());
-                            //prec_pro = Double.parseDouble(df2.format(prec_pro));
-                        }
-                        crearProducto(edt_nom_pro.getText().toString(), cant_pro, prec_pro);
-                    }else {
-                        mostrarMensajeInfo("Debes introducir un nombre de producto", true);
-                    }
-                }catch (Exception e){
-                    mostrarMensajeInfo("Error al añadir el producto "+e.getMessage(), true);
-                }
-            }
-        });
-
-        AlertDialog alertDialog = alertDialogBuilder.create();
-
-        try {
-            alertDialog.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
     }
 
-    private void crearDialogEditarProducto(final int id_producto, final String nombre_producto, final double precio_producto, final int cantidad_producto) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+    @Override
+    public void cogerContenidoCajasTextoDialogProducto(String id_producto, String nombre_producto, String canditad, String precio, boolean isNew) {
+        try {
+            int id_pro = 0;
+            int cant_pro = 1;
+            double prec_pro = 0;
+
+            //DecimalFormat df2 = new DecimalFormat("####.##");
+
+            if (!nombre_producto.isEmpty() && !nombre_producto.equals("Producto")){
+                if (!canditad.isEmpty() && !canditad.equals("Cantidad")){
+                    cant_pro = Integer.parseInt(canditad);
+                }
+                if (!precio.isEmpty() && !precio.equals("Precio")){
+                    prec_pro = Double.parseDouble(precio);
+                    //prec_pro = Double.parseDouble(df2.format(prec_pro));
+                }
+                if (isNew) {
+                    crearProducto(nombre_producto, cant_pro, prec_pro);
+                }else {
+                    id_pro = Integer.parseInt(id_producto);
+                    editarProducto(id_pro, nombre_producto, cant_pro, prec_pro);
+                }
+            }else {
+                mostrarMensajeInfo("Debes introducir un nombre de producto", true);
+            }
+        }catch (Exception e){
+            mostrarMensajeInfo("Error al añadir el producto "+e.getMessage(), true);
+        }
+    }
+
+    private void crearDialogEditarProducto(int id_producto, final String nombre_producto, final double precio_producto, final int cantidad_producto) {
+        DialogProducto dialogProducto= new DialogProducto();
+        dialogProducto.setIdProdEdit(String.valueOf(id_producto));
+        dialogProducto.setNomProdEdit(nombre_producto);
+        dialogProducto.setCantProdEdit(String.valueOf(cantidad_producto));
+        dialogProducto.setPrecProdEdit(String.valueOf(precio_producto));
+        dialogProducto.show(getSupportFragmentManager(), "Editar producto");
+        /*AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
         LinearLayout layout = new LinearLayout(this);
         LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -775,7 +711,7 @@ public class VistaProductosLista extends AppCompatActivity{
             alertDialog.show();
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     private void editarProducto(final int id_producto, final String nombre_producto, final int cant_pro, final double prec_pro) {

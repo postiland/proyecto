@@ -107,7 +107,7 @@ public class VistaListas extends AppCompatActivity implements DialogNombreLista.
                 }
             }
         });
-        
+
         icono_errores = (ImageView) findViewById(R.id.imv_icono_errores_listas);
         icono_errores.setVisibility(View.INVISIBLE);
         icono_ok = (ImageView) findViewById(R.id.imv_icono_ok_listas);
@@ -149,6 +149,7 @@ public class VistaListas extends AppCompatActivity implements DialogNombreLista.
 
                 Intent intent = new Intent(getBaseContext(), VistaProductosLista.class);
                 intent.putExtra("ID_LISTA", String.valueOf(lista.getId_lista()));
+                intent.putExtra("NOMBRE_LISTA", String.valueOf(lista.getNombre()));
                 startActivity(intent);
             }
         });
@@ -626,7 +627,7 @@ public class VistaListas extends AppCompatActivity implements DialogNombreLista.
     }
 
     @Override
-    public void cogerTextoCrearLista(String email_usuario) {
+    public void cogerEmailInvitarUsuarioLista(String email_usuario) {
         try {
             Matcher mather = modeloEmail.matcher(email_usuario);
 

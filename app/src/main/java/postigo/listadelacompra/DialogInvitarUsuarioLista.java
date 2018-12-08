@@ -40,7 +40,7 @@ public class DialogInvitarUsuarioLista extends AppCompatDialogFragment {
                 String email_usu = email_usuario.getText().toString();
 
                 if (!email_usu.isEmpty()){
-                        listener.cogerTextoCrearLista(email_usu);
+                        listener.cogerEmailInvitarUsuarioLista(email_usu);
                 }
 
             }
@@ -75,6 +75,6 @@ public class DialogInvitarUsuarioLista extends AppCompatDialogFragment {
     }
 
     public interface DialogInvitarUsuarioListaListener{
-        void cogerTextoCrearLista(String email_usuario);
+        void cogerEmailInvitarUsuarioLista(String email_usuario);
     }
 }
