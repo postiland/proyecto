@@ -82,12 +82,12 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
         btn_cambiar_contrasena.setOnClickListener(this);
 
         email = (EditText) findViewById(R.id.txv_email_usuario);
-//        email.setText("E-mail");
-//        email.setTextColor(getResources().getColor(R.color.gris));
+        email.setText("E-mail");
+        email.setTextColor(getResources().getColor(R.color.gris));
         contrasena = (EditText) findViewById(R.id.txv_contrasena_usuario);
         contrasena.setInputType(InputType.TYPE_CLASS_TEXT);
-//        contrasena.setText("Contraseña");
-//        contrasena.setTextColor(getResources().getColor(R.color.gris));
+        contrasena.setText("Contraseña");
+        contrasena.setTextColor(getResources().getColor(R.color.gris));
 
         email.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
