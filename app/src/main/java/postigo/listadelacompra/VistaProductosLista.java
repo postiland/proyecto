@@ -264,9 +264,6 @@ public class VistaProductosLista extends AppCompatActivity implements DialogProd
         });
     }
 
-
-
-
     private static class ViewHolder {
         TextView producto;
         TextView cantidad;

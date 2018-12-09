@@ -55,8 +55,8 @@ public class VistaRegistroUsuario extends AppCompatActivity implements View.OnCl
 
     private TextView txv_errores;
 
-    public static final String URL_OBTENER_EMAILS = "http://antoniopostigo.es/Slim2-ok/api/emails/usuarios";
-    public static final String URL_INSERTAR_USUARIO = "http://antoniopostigo.es/Slim2-ok/api/crear/usuario";
+    private static final String URL_OBTENER_EMAILS = "http://antoniopostigo.es/Slim2-ok/api/emails/usuarios";
+    private static final String URL_INSERTAR_USUARIO = "http://antoniopostigo.es/Slim2-ok/api/crear/usuario";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -597,7 +597,6 @@ public class VistaListas extends AppCompatActivity implements DialogNombreLista.
         dialogCrearLista.show(getSupportFragmentManager(), "Crear lista");
     }
 
-
     @Override
     public void cogerTextoCrearLista(String nombre_lista, boolean isNew) {
         try {
@@ -645,7 +644,6 @@ public class VistaListas extends AppCompatActivity implements DialogNombreLista.
             mostrarMensajeInfo("ERROR! Imposible invitar al usuario", true);
         }
     }
-
 
     private static class ViewHolder {
         TextView nombre;
