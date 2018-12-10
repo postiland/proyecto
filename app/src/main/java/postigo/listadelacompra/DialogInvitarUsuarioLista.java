@@ -49,11 +49,16 @@ public class DialogInvitarUsuarioLista extends AppCompatDialogFragment {
         email_usuario.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
+                String cojoTextoActual = String.valueOf(email_usuario.getText());
                 if (hasFocus) {
-                    String cojoTextoActual = String.valueOf(email_usuario.getText());
                     if (cojoTextoActual.equals("E-mail usuario")){
                         email_usuario.setText("");
                         email_usuario.setTextColor(getResources().getColor(R.color.negro));
+                    }
+                } else {
+                    if (cojoTextoActual.equals("")){
+                        email_usuario.setText("E-mail usuario");
+                        email_usuario.setTextColor(getResources().getColor(R.color.gris));
                     }
                 }
             }

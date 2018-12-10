@@ -92,11 +92,16 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
         email.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
+                String cojoTextoActual = String.valueOf(email.getText());
                 if (hasFocus) {
-                    String cojoTextoActual = String.valueOf(email.getText());
                     if (cojoTextoActual.equals("E-mail")){
                         email.setText("");
                         email.setTextColor(getResources().getColor(R.color.negro));
+                    }
+                }else {
+                    if (cojoTextoActual.equals("")){
+                        email.setText("E-mail");
+                        email.setTextColor(getResources().getColor(R.color.gris));
                     }
                 }
             }
@@ -105,12 +110,18 @@ public class PaginaPrincipal extends AppCompatActivity implements View.OnClickLi
         contrasena.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
+                String cojoTextoActual = String.valueOf(contrasena.getText());
                 if (hasFocus) {
-                    String cojoTextoActual = String.valueOf(contrasena.getText());
                     if (cojoTextoActual.equals("Contraseña")){
                         contrasena.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                         contrasena.setTextColor(getResources().getColor(R.color.negro));
                         contrasena.setText("");
+                    }
+                }else {
+                    if (cojoTextoActual.equals("")){
+                        contrasena.setInputType(InputType.TYPE_CLASS_TEXT);
+                        contrasena.setTextColor(getResources().getColor(R.color.gris));
+                        contrasena.setText("Contraseña");
                     }
                 }
             }

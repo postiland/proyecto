@@ -41,44 +41,33 @@ public class VistaListas extends AppCompatActivity implements DialogNombreLista.
 
     private String datosUsuario_id_usuario;
     private String datosUsuario_nombre_usuario;
-
-    ListView lista_listas;
-
-    Button crear_lista;
-
-    TextView txv_nom_lis;
-
-    private int id_lista_borrar = 0;
-
     private String nombre_lista_manipular = "";
 
-    private int id_posicion_lista = 0;
+    private ListView lista_listas;
 
-    private ImageView icono_errores;
-
-    private ImageView icono_ok;
+    private Button crear_lista;
 
     private TextView txv_mensajes;
 
+    private int id_lista_borrar = 0;
+    private int id_posicion_lista = 0;
+
+    private ImageView icono_errores;
+    private ImageView icono_ok;
+
     private ArrayList<Lista> listas_usuario;
-    ArrayAdapter<Lista> myAdapter;
+    private ArrayAdapter<Lista> myAdapter;
 
     private Pattern modeloEmail = Pattern
             .compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
                     + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
 
     public static final String URL_COGER_LISTAS = "http://antoniopostigo.es/Slim2-ok/api/id_usuario/obtener/id_listas";
-
     public static final String URL_COGER_USUARIOS_AVISAR = "http://antoniopostigo.es/Slim2-ok/api/obtener/usuarios/lista";
-
     public static final String URL_ENVIAR_EMAIL_AVISO = "http://antoniopostigo.es/Slim2-ok/api/alerta/usuarios/compra";
-
     public static final String URL_CREAR_LISTA = "http://antoniopostigo.es/Slim2-ok/api/crear/lista";
-
     public static final String URL_BORRAR_LISTA = "http://antoniopostigo.es/Slim2-ok/api/eliminar/lista";
-
     public static final String URL_INVITAR_USUARIO_LISTA = "http://antoniopostigo.es/Slim2-ok/api/anadir/usuario/lista";
-
     public static final String URL_EDITAR_LISTA = "http://antoniopostigo.es/Slim2-ok/api/editar/lista";
 
     @Override
@@ -312,7 +301,6 @@ public class VistaListas extends AppCompatActivity implements DialogNombreLista.
                             listaBorrar = listas_usuario.get(i);
                             if (listaBorrar.getId_lista() == id_lista_borrar){
                                 listas_usuario.remove(i);
-
                                 myAdapter.notifyDataSetChanged();
                             }
                         }
@@ -354,15 +342,11 @@ public class VistaListas extends AppCompatActivity implements DialogNombreLista.
                 JSONArray datos_usuario;
                 JSONObject data_user;
 
-
                 try {
                     datos_usuario= response.getJSONArray("data");
-
                     listas_usuario.clear();
-
                     for (int i=0; i<datos_usuario.length(); i++){
                         Lista lista=new Lista();
-
                         data_user = datos_usuario.getJSONObject(i);
                         lista.setId_lista(Integer.parseInt(data_user.getString("id_lista")));
                         lista.setId_usuario(Integer.parseInt(data_user.getString("id_usuario")));
@@ -370,10 +354,8 @@ public class VistaListas extends AppCompatActivity implements DialogNombreLista.
                         lista.setNumero_usuarios(Integer.parseInt(data_user.getString("numUsuarios")));
                         lista.setNumero_articulos(Integer.parseInt(data_user.getString("numArticulos")));
                         lista.setPrecio_total(Double.parseDouble(data_user.getString("precioTotal")));
-
                         listas_usuario.add(lista);
                     }
-
                     myAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     Toast.makeText(getApplicationContext(), "error: "+e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -411,22 +393,17 @@ public class VistaListas extends AppCompatActivity implements DialogNombreLista.
                 JSONArray datos_usuario;
                 JSONObject data_user;
 
-
                 try {
                     datos_usuario= response.getJSONArray("data");
-
                     Usuario[] usuarios_avisar = new Usuario[datos_usuario.length()];
 
                     for (int i=0; i<datos_usuario.length(); i++){
                         Usuario usuario_avisar = new Usuario();
-
                         data_user = datos_usuario.getJSONObject(i);
                         usuario_avisar.setId_usuario(Integer.parseInt(data_user.getString("id_usuario")));
                         usuario_avisar.setNombre(data_user.getString("nombre"));
                         usuario_avisar.setEmail(data_user.getString("email"));
-
                         usuarios_avisar[i] = usuario_avisar;
-
                         enviarEmailAvisoCompra(usuario_avisar);
                     }
 
@@ -446,8 +423,6 @@ public class VistaListas extends AppCompatActivity implements DialogNombreLista.
     }
 
     private void enviarEmailAvisoCompra(Usuario usuario_avisar) {
-        //Toast.makeText(getApplicationContext(), "Holi: "+usuario_avisar.toString()+"\n--"+nombre_lista_manipular, Toast.LENGTH_SHORT).show();
-
         final ProgressDialog progreso = new ProgressDialog(this);
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams envio_email_aviso = new RequestParams();
@@ -473,13 +448,11 @@ public class VistaListas extends AppCompatActivity implements DialogNombreLista.
 
                 try {
                     estado = response.getString("status");
-
                     if (estado.length()>0) {
                         mostrarMensajeInfo("Emails enviados a los usuarios", false);
                     }else {
                         mostrarMensajeInfo("Fallo al mandar emails", true);
                     }
-
                 } catch (JSONException e) {
                     Toast.makeText(getApplicationContext(), "error: "+e.getMessage(), Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
@@ -517,16 +490,13 @@ public class VistaListas extends AppCompatActivity implements DialogNombreLista.
                 try {
                     estado = response.getString("status");
 
-
                     if (estado.length()>0) {
                         id_lista_creada = Integer.parseInt(response.getString("data"));
-
                         mostrarMensajeInfo("Lista creada", false);
                         listaAnadir.setId_lista(id_lista_creada);
                         listaAnadir.setNombre(nombre_lista);
                         listaAnadir.setId_usuario(Integer.parseInt(datosUsuario_id_usuario));
                         listas_usuario.add(listaAnadir);
-
                         myAdapter.notifyDataSetChanged();
                     }
                 } catch (JSONException e) {
@@ -569,14 +539,11 @@ public class VistaListas extends AppCompatActivity implements DialogNombreLista.
 
                         for (int i=0; i<listas_usuario.size(); i++){
                             Lista recorriendo_lista = listas_usuario.get(i);
-
                             if (recorriendo_lista.getId_lista() == id_lista_borrar){
                                 listas_usuario.get(i).setNombre(nombre_lista);
-
                                 myAdapter.notifyDataSetChanged();
                             }
                         }
-
                     }
                 } catch (JSONException e) {
                     Toast.makeText(getApplicationContext(), "error: "+e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -597,6 +564,17 @@ public class VistaListas extends AppCompatActivity implements DialogNombreLista.
         dialogCrearLista.show(getSupportFragmentManager(), "Crear lista");
     }
 
+    private void crearDialogEditarLista(String nombre_lista_pulsada) {
+        DialogNombreLista dialogCrearLista= new DialogNombreLista();
+        dialogCrearLista.setNomListEdit(nombre_lista_pulsada);
+        dialogCrearLista.show(getSupportFragmentManager(), "Editar lista");
+    }
+
+    private void crearDialogInvitarUsuarioLista() {
+        DialogInvitarUsuarioLista dialogInvitarUsuarioLista= new DialogInvitarUsuarioLista();
+        dialogInvitarUsuarioLista.show(getSupportFragmentManager(), "Invitar a usuario");
+    }
+
     @Override
     public void cogerTextoCrearLista(String nombre_lista, boolean isNew) {
         try {
@@ -609,21 +587,9 @@ public class VistaListas extends AppCompatActivity implements DialogNombreLista.
                     editarLista(nombre_lista);
                 }
             }
-
         }catch (Exception e){
             mostrarMensajeInfo("ERROR! Imposible crear lista", true);
         }
-    }
-
-    private void crearDialogEditarLista(String nombre_lista_pulsada) {
-        DialogNombreLista dialogCrearLista= new DialogNombreLista();
-        dialogCrearLista.setNomListEdit(nombre_lista_pulsada);
-        dialogCrearLista.show(getSupportFragmentManager(), "Editar lista");
-    }
-
-    private void crearDialogInvitarUsuarioLista() {
-        DialogInvitarUsuarioLista dialogInvitarUsuarioLista= new DialogInvitarUsuarioLista();
-        dialogInvitarUsuarioLista.show(getSupportFragmentManager(), "Invitar a usuario");
     }
 
     @Override

@@ -108,11 +108,16 @@ public class VistaRegistroUsuario extends AppCompatActivity implements View.OnCl
         nombre.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
+                String cojoTextoActual = String.valueOf(nombre.getText());
                 if (hasFocus) {
-                    String cojoTextoActual = String.valueOf(nombre.getText());
                     if (cojoTextoActual.equals("Nombre")){
                         nombre.setText("");
                         nombre.setTextColor(getResources().getColor(R.color.negro));
+                    }
+                }else {
+                    if (cojoTextoActual.equals("")){
+                        nombre.setText("Nombre");
+                        nombre.setTextColor(getResources().getColor(R.color.gris));
                     }
                 }
             }
@@ -120,11 +125,17 @@ public class VistaRegistroUsuario extends AppCompatActivity implements View.OnCl
         apellidos.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
+                String cojoTextoActual = String.valueOf(apellidos.getText());
                 if (hasFocus) {
-                    String cojoTextoActual = String.valueOf(apellidos.getText());
+
                     if (cojoTextoActual.equals("Apellidos")){
                         apellidos.setText("");
                         apellidos.setTextColor(getResources().getColor(R.color.negro));
+                    }
+                }else {
+                    if (cojoTextoActual.equals("")){
+                        apellidos.setText("Apellidos");
+                        apellidos.setTextColor(getResources().getColor(R.color.gris));
                     }
                 }
             }
@@ -132,11 +143,16 @@ public class VistaRegistroUsuario extends AppCompatActivity implements View.OnCl
         email.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
+                String cojoTextoActual = String.valueOf(email.getText());
                 if (hasFocus) {
-                    String cojoTextoActual = String.valueOf(email.getText());
                     if (cojoTextoActual.equals("E-mail")){
                         email.setText("");
                         email.setTextColor(getResources().getColor(R.color.negro));
+                    }
+                }else {
+                    if (cojoTextoActual.equals("")){
+                        email.setText("E-mail");
+                        email.setTextColor(getResources().getColor(R.color.gris));
                     }
                 }
             }
@@ -144,11 +160,16 @@ public class VistaRegistroUsuario extends AppCompatActivity implements View.OnCl
         telefono.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
+                String cojoTextoActual = String.valueOf(telefono.getText());
                 if (hasFocus) {
-                    String cojoTextoActual = String.valueOf(telefono.getText());
                     if (cojoTextoActual.equals("Teléfono")){
                         telefono.setText("");
                         telefono.setTextColor(getResources().getColor(R.color.negro));
+                    }
+                }else {
+                    if (cojoTextoActual.equals("")){
+                        telefono.setText("Teléfono");
+                        telefono.setTextColor(getResources().getColor(R.color.gris));
                     }
                 }
             }
@@ -156,12 +177,18 @@ public class VistaRegistroUsuario extends AppCompatActivity implements View.OnCl
         contrasena.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
+                String cojoTextoActual = String.valueOf(contrasena.getText());
                 if (hasFocus) {
-                    String cojoTextoActual = String.valueOf(contrasena.getText());
                     if (cojoTextoActual.equals("Contraseña")){
                         contrasena.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                         contrasena.setText("");
                         contrasena.setTextColor(getResources().getColor(R.color.negro));
+                    }
+                }else {
+                    if (cojoTextoActual.equals("")){
+                        contrasena.setText("Contraseña");
+                        contrasena.setInputType(InputType.TYPE_CLASS_TEXT);
+                        contrasena.setTextColor(getResources().getColor(R.color.gris));
                     }
                 }
             }

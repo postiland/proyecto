@@ -53,32 +53,25 @@ public class VistaProductosLista extends AppCompatActivity implements DialogProd
     private int posicion_producto_editar;
 
     private Button btn_anadir_producto;
-
     private Button btn_limpiar_lista;
 
     ListView lista_productos;
 
     private ImageView icono_errores;
-
     private ImageView icono_ok;
 
     private TextView txv_mensajes;
 
     private ArrayList<Producto> productos_lista;
+
     ArrayAdapter<Producto> myAdapter;
 
     public static final String URL_COGER_PRODUCTOS = "http://antoniopostigo.es/Slim2-ok/api/id_lista/obtener/productos";
-
     public static final String URL_CREAR_PRODUCTO = "http://antoniopostigo.es/Slim2-ok/api/anadir/producto/lista";
-
     public static final String URL_EDITAR_PRODUCTO = "http://antoniopostigo.es/Slim2-ok/api/editar/producto";
-
     public static final String URL_EDITAR_PRODUCTO_COMPRADO = "http://antoniopostigo.es/Slim2-ok/api/editar/producto/comprado";
-
     public static final String URL_LIMPIAR_LISTA = "http://antoniopostigo.es/Slim2-ok/api/eliminar/productos/lista";
-
     public static final String URL_ELIMINAR_PRODUCTO = "http://antoniopostigo.es/Slim2-ok/api/eliminar/producto/lista";
-
     public static final String URL_LIMPIAR_PRODUCTOS = "http://antoniopostigo.es/Slim2-ok/api/limpiar/productos/comprados";
 
     @Override
@@ -232,21 +225,16 @@ public class VistaProductosLista extends AppCompatActivity implements DialogProd
 
                     for (int i=0; i<productos_lista.size(); i++){
                         Producto recorriendo_productos = productos_lista.get(i);
-
                         if (recorriendo_productos.getId_producto() == id_producto){
                             productos_lista.get(i).setComprado(comprado);
-
                             myAdapter.notifyDataSetChanged();
-
                         }
                     }
-
                     for (int i=0; i<productos_lista.size(); i++){
                         if (productos_lista.get(i).getComprado() == 1){
                             contadorComprados++;
                         }
                     }
-
                     if (contadorComprados == productos_lista.size()){
                         mostrarAlertDialogLimpiarLista("¡Has completado la compra! ¿Quieres limpiar la lista?");
                     }
@@ -324,7 +312,12 @@ public class VistaProductosLista extends AppCompatActivity implements DialogProd
         Producto producto_pulsado = productos_lista.get(posicion_producto_editar);
 
         if(item.getItemId()==R.id.editar_producto){
-            crearDialogEditarProducto(producto_pulsado.getId_producto(), producto_pulsado.getNombre_producto(), producto_pulsado.getPrecio(), producto_pulsado.getCantidad());
+            crearDialogEditarProducto(
+                    producto_pulsado.getId_producto(),
+                    producto_pulsado.getNombre_producto(),
+                    producto_pulsado.getPrecio(),
+                    producto_pulsado.getCantidad()
+            );
         }else if(item.getItemId()==R.id.eliminar_producto){
             eliminarProductoLista(producto_pulsado.getId_producto());
         }else{
@@ -404,24 +397,18 @@ public class VistaProductosLista extends AppCompatActivity implements DialogProd
                 JSONArray datos_usuario;
                 JSONObject data_user;
 
-
                 try {
                     datos_usuario= response.getJSONArray("data");
-
                     productos_lista.clear();
-
                     for (int i=0; i<datos_usuario.length(); i++){
                         Producto producto=new Producto();
-
                         data_user = datos_usuario.getJSONObject(i);
                         producto.setId_producto(Integer.parseInt(data_user.getString("id_producto")));
                         producto.setNombre_producto(data_user.getString("nombre"));
                         producto.setPrecio(Double.parseDouble(data_user.getString("precio")));
                         producto.setCantidad(Integer.parseInt(data_user.getString("cantidad")));
                         producto.setComprado(Integer.parseInt(data_user.getString("comprado")));
-
                         productos_lista.add(producto);
-
                         myAdapter.notifyDataSetChanged();
                     }
                 } catch (JSONException e) {
@@ -466,7 +453,6 @@ public class VistaProductosLista extends AppCompatActivity implements DialogProd
                 try {
                     estado = response.getString("status");
                     id_producto_creado = Integer.parseInt(response.getString("data"));
-
                     if (estado.length()>0) {
                         mostrarMensajeInfo("Producto creado", false);
                         producto_anadido.setId_producto(id_producto_creado);
@@ -581,7 +567,11 @@ public class VistaProductosLista extends AppCompatActivity implements DialogProd
     }
 
     @Override
-    public void cogerContenidoCajasTextoDialogProducto(String id_producto, String nombre_producto, String canditad, String precio, boolean isNew) {
+    public void cogerContenidoCajasTextoDialogProducto(String id_producto,
+                                                       String nombre_producto,
+                                                       String canditad,
+                                                       String precio,
+                                                       boolean isNew) {
         try {
             int id_pro = 0;
             int cant_pro = 1;
@@ -648,21 +638,15 @@ public class VistaProductosLista extends AppCompatActivity implements DialogProd
 
                 try {
                     estado = response.getString("status");
-
-
                     if (estado.length()>0) {
-
                         for (int i=0; i<productos_lista.size(); i++){
                             Producto recorriendo_productos = productos_lista.get(i);
-
                             if (recorriendo_productos.getId_producto() == id_producto){
                                 productos_lista.get(i).setNombre_producto(nombre_producto);
                                 productos_lista.get(i).setPrecio(prec_pro);
                                 productos_lista.get(i).setCantidad(cant_pro);
                                 productos_lista.get(i).setComprado(0);
-
                                 myAdapter.notifyDataSetChanged();
-
                                 mostrarMensajeInfo("Producto editado", false);
                             }
                         }
@@ -672,7 +656,6 @@ public class VistaProductosLista extends AppCompatActivity implements DialogProd
                     e.printStackTrace();
                 }
             }
-
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 progreso.dismiss();

@@ -21,7 +21,6 @@ public class DialogProducto extends AppCompatDialogFragment {
     private EditText cantidad_producto;
     private EditText precio_producto;
 
-
     private DialogProductoListener listener;
 
     private String id_prod_edit = "";
@@ -107,48 +106,61 @@ public class DialogProducto extends AppCompatDialogFragment {
 
             }
         });
-
         nombre_producto.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
+                String cojoTextoActual = String.valueOf(nombre_producto.getText());
                 if (hasFocus) {
-                    String cojoTextoActual = String.valueOf(nombre_producto.getText());
                     if (cojoTextoActual.equals("Producto")){
                         nombre_producto.setText("");
                         nombre_producto.setTextColor(getResources().getColor(R.color.negro));
                     }
-                }
-            }
-        });
-
-        cantidad_producto.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if (hasFocus) {
-                    String cojoTextoActual = String.valueOf(cantidad_producto.getText());
-                    if (cojoTextoActual.equals("Cantidad")){
-                        cantidad_producto.setText("");
-                        cantidad_producto.setInputType(InputType.TYPE_CLASS_NUMBER);
-                        cantidad_producto.setTextColor(getResources().getColor(R.color.negro));
+                } else {
+                    if (cojoTextoActual.equals("")){
+                        nombre_producto.setText("Producto");
+                        nombre_producto.setTextColor(getResources().getColor(R.color.gris));
                     }
                 }
             }
         });
-
+        cantidad_producto.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                String cojoTextoActual = String.valueOf(cantidad_producto.getText());
+                if (hasFocus) {
+                    if (cojoTextoActual.equals("Cantidad") || cojoTextoActual.equals("Cant")){
+                        cantidad_producto.setText("");
+                        cantidad_producto.setInputType(InputType.TYPE_CLASS_NUMBER);
+                        cantidad_producto.setTextColor(getResources().getColor(R.color.negro));
+                    }
+                } else {
+                    if (cojoTextoActual.equals("")){
+                        cantidad_producto.setInputType(InputType.TYPE_CLASS_TEXT);
+                        cantidad_producto.setTextColor(getResources().getColor(R.color.gris));
+                        cantidad_producto.setText("Cantidad");
+                    }
+                }
+            }
+        });
         precio_producto.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
+                String cojoTextoActual = String.valueOf(precio_producto.getText());
                 if (hasFocus) {
-                    String cojoTextoActual = String.valueOf(precio_producto.getText());
                     if (cojoTextoActual.equals("Precio")){
                         precio_producto.setText("");
                         precio_producto.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
                         precio_producto.setTextColor(getResources().getColor(R.color.negro));
                     }
+                } else {
+                    if (cojoTextoActual.equals("")){
+                        precio_producto.setInputType(InputType.TYPE_CLASS_TEXT);
+                        precio_producto.setText("Precio");
+                        precio_producto.setTextColor(getResources().getColor(R.color.gris));
+                    }
                 }
             }
         });
-
         return  builder.create();
     }
 

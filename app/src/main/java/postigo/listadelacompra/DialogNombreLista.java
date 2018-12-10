@@ -32,14 +32,10 @@ public class DialogNombreLista extends AppCompatDialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_crear_lista, null);
-
         nombre_lista = view.findViewById(R.id.edt_nom_lista);
-
         titulo_dialog = view.findViewById(R.id.titulo_dialog_nombre_lista);
-
         nombre_lista.setTextColor(getResources().getColor(R.color.gris));
 
         if (!nom_list_edit.isEmpty()) {
@@ -47,13 +43,16 @@ public class DialogNombreLista extends AppCompatDialogFragment {
             nombre_lista.setTextColor(getResources().getColor(R.color.negro));
             titulo_boton_ok = "Editar nombre";
             titulo_dialog.setText("Editar");
-            LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
             llp.setMargins(200, 8, 0, 0); // llp.setMargins(left, top, right, bottom);
             titulo_dialog.setLayoutParams(llp);
         }
 
         builder.setView(view)
-                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Cancelar",
+                        new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
@@ -77,11 +76,16 @@ public class DialogNombreLista extends AppCompatDialogFragment {
         nombre_lista.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
+                String cojoTextoActual = String.valueOf(nombre_lista.getText());
                 if (hasFocus) {
-                    String cojoTextoActual = String.valueOf(nombre_lista.getText());
                     if (cojoTextoActual.equals("Nombre lista")){
                         nombre_lista.setText("");
                         nombre_lista.setTextColor(getResources().getColor(R.color.negro));
+                    }
+                } else {
+                    if (cojoTextoActual.equals("")){
+                        nombre_lista.setText("Nombre lista");
+                        nombre_lista.setTextColor(getResources().getColor(R.color.gris));
                     }
                 }
             }
