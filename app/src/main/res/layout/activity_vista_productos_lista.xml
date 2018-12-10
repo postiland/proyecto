@@ -38,9 +38,13 @@
         android:id="@+id/txv_mensajes_productos"
         android:layout_width="332dp"
         android:layout_height="30dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginBottom="52dp"
+        android:fontFamily="@font/nunito"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/ltv_productos"
-        app:layout_constraintTop_toBottomOf="@+id/ltv_productos" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/ltv_productos" />
 
     <ListView
         android:id="@+id/ltv_productos"
@@ -65,6 +69,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:background="@color/verdeClaro"
+        android:fontFamily="@font/nunito_bold"
         android:text="Añadir producto"
         android:textColor="@android:color/background_light"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -77,6 +82,7 @@
         android:layout_width="190dp"
         android:layout_height="wrap_content"
         android:background="@color/gris"
+        android:fontFamily="@font/nunito_bold"
         android:text="Compra finalizada"
         android:textColor="@android:color/background_light"
         app:layout_constraintBottom_toBottomOf="parent"

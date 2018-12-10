@@ -156,7 +156,6 @@ public class VistaListas extends AppCompatActivity implements DialogNombreLista.
                 }else {
                     mostrarMensajeInfo("Solo el propietario puede editar o eliminar una lista", true);
                 }
-
                 return true;
             }
         });
@@ -164,7 +163,29 @@ public class VistaListas extends AppCompatActivity implements DialogNombreLista.
         registerForContextMenu(lista_listas);
     }
 
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Si vuelves atrás se cerrará la sesión ¿Estas seguro/a?")
+                .setTitle("VOLVER")
+                .setPositiveButton("CONFIRMAR", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent intent = new Intent(getBaseContext(), PaginaPrincipal.class);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
     private void mostrarMensajeInfo(String mensaje, boolean esError){
+        icono_errores.setVisibility(View.INVISIBLE);
+        icono_ok.setVisibility(View.INVISIBLE);
+        txv_mensajes.setText("");
         if (esError) {
             icono_errores.setVisibility(View.VISIBLE);
             txv_mensajes.setTextColor(getResources().getColor(R.color.rojo));
@@ -578,7 +599,7 @@ public class VistaListas extends AppCompatActivity implements DialogNombreLista.
     @Override
     public void cogerTextoCrearLista(String nombre_lista, boolean isNew) {
         try {
-            if (nombre_lista.isEmpty() || nombre_lista.equals("Nombre lista")){
+            if (nombre_lista.isEmpty() || nombre_lista.equals("Nombre lista") || nombre_lista.equals(" ") || nombre_lista.equals("  ")){
                 mostrarMensajeInfo("Debes introducir un nombre de lista", true);
             }else {
                 if (isNew) {

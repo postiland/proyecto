@@ -9,11 +9,15 @@
 
     <TextView
         android:id="@+id/txv_mensajes_listas"
-        android:layout_width="332dp"
+        android:layout_width="326dp"
         android:layout_height="30dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/nunito"
+        app:layout_constraintBottom_toTopOf="@+id/btn_crear_lista"
         app:layout_constraintEnd_toEndOf="@+id/ltv_listas"
-        app:layout_constraintTop_toBottomOf="@+id/ltv_listas" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/ltv_listas" />
 
     <ListView
         android:id="@+id/ltv_listas"
@@ -44,6 +48,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:background="@color/verdeClaro"
+        android:fontFamily="@font/nunito_bold"
         android:text="Crear lista"
         android:textColor="@android:color/background_light"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -55,8 +60,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginRight="4dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/btn_crear_lista"
         app:layout_constraintEnd_toStartOf="@+id/txv_mensajes_listas"
@@ -69,11 +74,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginRight="4dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/btn_crear_lista"
-        app:layout_constraintEnd_toStartOf="@+id/txv_mensajes_listas"
+        app:layout_constraintEnd_toEndOf="@+id/imv_icono_errores_listas"
         app:layout_constraintTop_toBottomOf="@+id/ltv_listas"
         app:layout_constraintVertical_bias="0.8"
         app:srcCompat="@drawable/ic_icono_check" />

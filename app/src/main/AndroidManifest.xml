@@ -24,6 +24,10 @@
         <activity android:name=".VistaRegistroUsuario" />
         <activity android:name=".VistaBorrarCuenta" />
         <activity android:name=".VistaActivarEmail"></activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

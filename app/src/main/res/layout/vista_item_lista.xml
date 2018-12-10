@@ -14,6 +14,7 @@
         android:layout_marginStart="12dp"
         android:layout_marginLeft="12dp"
         android:layout_marginTop="8dp"
+        android:fontFamily="@font/nunito"
         android:text="TextView"
         android:textColor="@color/negro"
         android:textSize="24sp"
@@ -25,6 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        android:fontFamily="@font/nunito"
         android:text="Articulos:"
         android:textColor="@color/verdeOscuro"
         app:layout_constraintStart_toStartOf="@+id/txv_nom_lis"
@@ -37,6 +39,7 @@
         android:layout_marginStart="4dp"
         android:layout_marginLeft="4dp"
         android:layout_marginTop="12dp"
+        android:fontFamily="@font/nunito"
         android:textColor="@color/verdeOscuro"
         app:layout_constraintStart_toEndOf="@+id/textView9"
         app:layout_constraintTop_toBottomOf="@+id/txv_nom_lis" />
@@ -48,6 +51,7 @@
         android:layout_marginStart="4dp"
         android:layout_marginLeft="4dp"
         android:layout_marginTop="12dp"
+        android:fontFamily="@font/nunito"
         android:textColor="@color/verdeOscuro"
         app:layout_constraintStart_toEndOf="@+id/textView11"
         app:layout_constraintTop_toBottomOf="@+id/txv_nom_lis" />
@@ -59,6 +63,7 @@
         android:layout_marginStart="12dp"
         android:layout_marginLeft="12dp"
         android:layout_marginTop="12dp"
+        android:fontFamily="@font/nunito"
         android:text="Total:"
         android:textColor="@color/verdeOscuro"
         app:layout_constraintStart_toEndOf="@+id/txv_total_articulos"
@@ -74,7 +79,8 @@
         android:text="€"
         android:textColor="@color/verdeOscuro"
         app:layout_constraintStart_toEndOf="@+id/txv_total_precio"
-        app:layout_constraintTop_toBottomOf="@+id/txv_nom_lis" />
+        app:layout_constraintTop_toBottomOf="@+id/txv_nom_lis"
+        android:fontFamily="@font/nunito" />
 
     <ImageView
         android:id="@+id/imageView6"
@@ -93,6 +99,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="4dp"
+        android:fontFamily="@font/nunito"
         android:paddingRight="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txv_nom_lis" />
